@@ -6,7 +6,7 @@ class Solution {
               .forEach(twoD -> Arrays.stream(twoD)
                                       .forEach(oneD -> Arrays.fill(oneD, -1)));
         int ans= cPu(grid,dp,row1-1,col1-1,row2-1);   
-        if(ans<0){
+        if(ans == Integer.MIN_VALUE){
             return 0;
         }else{
             return ans;
@@ -39,7 +39,13 @@ class Solution {
            rem=grid[row1][col1]+grid[row2][col2];
        }
 
-       dp[row1][col1][row2]=max+rem;
-       return max+rem;
+      if(max == Integer.MIN_VALUE){
+            dp[row1][col1][row2] = Integer.MIN_VALUE;
+            return Integer.MIN_VALUE;
+
+        }else{
+             dp[row1][col1][row2] = max+rem;
+             return max+rem;
+        }
     }
 }
