@@ -1,21 +1,19 @@
 class Solution {
     public int maxProduct(int[] nums) {
-        int prefixProd=1,max1=Integer.MIN_VALUE,suffixProd=1,max2=Integer.MIN_VALUE;
-        
-        //Prefix
-         for(int i=0;i<nums.length;i++){
-             if(prefixProd==0){prefixProd=1;}
-             prefixProd*=nums[i];
-            max1=max1>prefixProd?max1:prefixProd;
-         }
+       int prefixMaxProd=nums[0],overAllPrefixMaxProd=nums[0],suffixMaxProd=nums[nums.length-1],overAllSuffixMaxProd=nums[nums.length-1];
 
-         //Suffix
-         for(int i=nums.length-1;i>=0;i--){
-             if(suffixProd==0){suffixProd=1;}
-             suffixProd*=nums[i];
-            max2=max2>suffixProd?max2:suffixProd;
-         }
+       for(int i=1;i<nums.length;i++){
+           if(prefixMaxProd==0){prefixMaxProd=nums[i];}
+          else{ prefixMaxProd*=nums[i];}
+            overAllPrefixMaxProd=overAllPrefixMaxProd>prefixMaxProd?overAllPrefixMaxProd:prefixMaxProd;
+       }
 
-         return max1>max2?max1:max2;
+        for(int i=nums.length-2;i>=0;i--){
+            if(suffixMaxProd==0){suffixMaxProd=nums[i];}
+          else{ suffixMaxProd*=nums[i];}
+            overAllSuffixMaxProd=overAllSuffixMaxProd>suffixMaxProd?overAllSuffixMaxProd:suffixMaxProd;
+       }
+
+       return overAllPrefixMaxProd>overAllSuffixMaxProd?overAllPrefixMaxProd:overAllSuffixMaxProd;
     }
 }
