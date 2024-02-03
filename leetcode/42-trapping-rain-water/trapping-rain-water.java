@@ -1,30 +1,30 @@
 class Solution {
-    public int[] prefixMax(int[] arr){
-        int[] preMax=new int[arr.length];
-        preMax[0]=arr[0];
-        for(int i=1;i<arr.length;i++){
-         preMax[i]=preMax[i-1]>arr[i]?preMax[i-1]:arr[i]; 
-        }
-        return preMax;
+    private int[] findPrefMax(int[] height){
+      int[] arr=new int[height.length];
+      arr[0]=height[0];
+      for(int i=1;i<height.length;i++){
+          arr[i]=arr[i-1]>height[i]?arr[i-1]:height[i];
+      }
+      return arr;
     }
-
-    public int[] suffixMax(int[] arr){
-        int[] suffMax=new int[arr.length];
-        suffMax[arr.length-1]=arr[arr.length-1];
-        for(int i=arr.length-2;i>=0;i--){
-         suffMax[i]=suffMax[i+1]>arr[i]?suffMax[i+1]:arr[i]; 
-        }
-        return suffMax;
+    private int[] findSuffMax(int[] height){
+     int[] arr=new int[height.length];
+       arr[height.length-1]=height[height.length-1]; 
+       for(int i=height.length-2;i>=0;i--){
+          arr[i]=arr[i+1]>height[i]?arr[i+1]:height[i]; 
+       }
+       return arr;
     }
     public int trap(int[] height) {
-       int[] suffixmax=suffixMax(height);
-       int[] prefixmax=prefixMax(height);
-       int units=0;
+        int[] prefMax=findPrefMax(height);
+        int[] suffMax=findSuffMax(height);
+       int ans=0;
        for(int i=1;i<height.length-1;i++){
-        if(suffixmax[i+1]-height[i]>0 && prefixmax[i-1]-height[i]>0){
-         units+=(suffixmax[i+1]-height[i]<prefixmax[i-1]-height[i]?suffixmax[i+1]-height[i]:prefixmax[i-1]-height[i]);
+           int units=Math.min(prefMax[i-1],suffMax[i+1])-height[i];
+           if(units>0){
+          ans+=units;
+           }
        }
-       }
-       return units; 
+       return ans;
     }
 }
