@@ -10,15 +10,15 @@
  */
 class Solution {
     public ListNode middleNode(ListNode head) {
-        ListNode sPointer=head;
-        ListNode fPointer=head;
-        while(fPointer.next!=null&&fPointer.next.next!=null){
-            sPointer=sPointer.next;
-            fPointer=fPointer.next.next;
-        }
-        if(fPointer.next!=null){
-        return sPointer.next;
-        }
-        return sPointer;
+       ListNode slow=head;
+       ListNode fast=head;
+       while(fast.next!=null && fast.next.next!=null){
+           slow=slow.next;
+           fast=fast.next.next;
+       } 
+       if(fast.next==null){
+        return slow;
+       }
+       return slow.next;
     }
 }
