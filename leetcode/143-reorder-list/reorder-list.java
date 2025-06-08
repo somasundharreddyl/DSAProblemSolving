@@ -10,41 +10,33 @@
  */
 class Solution {
     public void reorderList(ListNode head) {
-        ListNode fNode=head;
-        ListNode sNode=head;
-
-        //1.Divide into Two Halfs.
-        while(fNode.next!=null && fNode.next.next!=null){
-           sNode=sNode.next;
-           fNode=fNode.next.next;
+        if(head==null && head.next==null){
+            return;
         }
-        ListNode shFNode=sNode.next;
-        if(fNode.next!=null){
-            fNode=fNode.next;
-        }
-
-      //2.Revers the Second Half.
-       ListNode prev=null;
-       ListNode curr=shFNode;
-
-       while(curr!=null){
-       ListNode temp=curr.next;
-       curr.next=prev;
-       prev=curr;
-       curr=temp;
+       ListNode fast=head;
+       ListNode slow=head;
+       while(fast.next!=null && fast.next.next!=null){
+        fast=fast.next.next;
+        slow=slow.next;
        }
-      shFNode=prev;
-
-     ListNode fhFNode=head;
-     while(fhFNode!=sNode){
-     ListNode temp=fhFNode.next;
-     fhFNode.next=shFNode;
-     ListNode temp1=shFNode.next;
-     shFNode.next=temp;
-     shFNode=temp1;
-     fhFNode=fhFNode.next.next;
-     }
-     fhFNode.next=shFNode;
-    
+       ListNode curr=slow.next;
+       slow.next=null;
+       ListNode prev=null;
+       while(curr!=null){
+           ListNode currp1=curr.next;
+            curr.next=prev;
+            prev=curr;
+            curr=currp1;
+       }
+       ListNode left=head;
+       ListNode right=prev;
+       while(right!=null){
+       ListNode leftp1=left.next;
+       ListNode rightp1=right.next;
+        left.next=right;
+        right.next=leftp1;
+        left=leftp1;
+        right=rightp1;
+       }
     }
 }
