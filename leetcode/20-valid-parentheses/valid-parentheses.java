@@ -1,20 +1,22 @@
 class Solution {
     public boolean isValid(String s) {
-        Stack<Character> st=new Stack<>();
-        for(int i=0;i<s.length();i++){
-            if(st.size()<=0){
-                st.push(s.charAt(i));
-            }
-            else if(st.peek()=='(' && s.charAt(i)==')' || 
-            st.peek()=='{' && s.charAt(i)=='}' || st.peek()=='[' && s.charAt(i)==']'){
-                st.pop();
+        Stack<Character> stack=new Stack<>();
+        boolean isvalid=true;
+        int i=0;
+        while(i<s.length()){
+            if(s.charAt(i)=='(' || s.charAt(i)=='[' || s.charAt(i)=='{' || stack.size()==0){
+                stack.push(s.charAt(i));
+            }else if((s.charAt(i)==')' && stack.peek()=='(') || (s.charAt(i)==']' && stack.peek()=='[') || (s.charAt(i)=='}' && stack.peek()=='{')){
+                stack.pop();
             }else{
-                st.push(s.charAt(i));
+                stack.push(s.charAt(i));
             }
+            i++;
         }
-        if(st.size()>0){
-            return false;
+        if(stack.size()==0){
+            return isvalid;
+        }else{
+            return !isvalid;
         }
-        return true;
     }
 }
