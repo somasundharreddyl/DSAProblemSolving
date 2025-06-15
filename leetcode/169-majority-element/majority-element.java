@@ -8,6 +8,7 @@ class Solution {
             }else{
                 if(freq==0){
                     val=nums[i];
+                    freq++;
                 }else{
                     freq--;
                 }
