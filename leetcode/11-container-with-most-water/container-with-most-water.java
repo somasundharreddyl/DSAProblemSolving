@@ -1,16 +1,18 @@
 class Solution {
     public int maxArea(int[] height) {
-        int i=0,j=height.length-1,currWaterLevel=Integer.MIN_VALUE,overAllWaterLevel=Integer.MIN_VALUE;
-        while(i<j){
-            int min=height[i]>height[j]?height[j]:height[i];
-            currWaterLevel=(j-i)*min;
-            overAllWaterLevel=overAllWaterLevel>currWaterLevel?overAllWaterLevel:currWaterLevel;
-            if(height[i]>height[j]){
-                j--;
-            }else{
-                i++;
-            }
+        int start=0,end=height.length-1;
+        int ans=Integer.MIN_VALUE;
+        while(start<=end){
+         if(height[start]<height[end]){
+           int store=(end-start)*Math.min(height[start],height[end]);
+           ans=ans>store?ans:store;
+             start++;
+         }else{
+           int store=(end-start)*Math.min(height[start],height[end]);
+           ans=ans>store?ans:store;
+           end--;
+         }
         }
-        return overAllWaterLevel;
+        return ans;
     }
 }
