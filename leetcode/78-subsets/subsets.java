@@ -1,24 +1,23 @@
 class Solution {
-
-     public boolean checkBit(int n, int i){
-        if((n&(1<<i)) != 0) return true;
-        return false;
-    }
-
-
     public List<List<Integer>> subsets(int[] nums) {
-        int n = nums.length;
-        int totalno = (1<<n);
-        List<List<Integer>> ans = new ArrayList<>();
-        for(int i = 0; i<totalno; i++){
-            List<Integer> temp = new ArrayList<>();
-            for(int j = 0; j<n; j++){
-                if(checkBit(i,j)==true){
-                    temp.add(nums[j]);
+        List<List<Integer>> ans=new ArrayList<>();
+        int total=1<<nums.length;
+        for(int i=0;i<total;i++){
+            List<Integer> list=new ArrayList<>();
+            for(int j=0;j<nums.length;j++){
+                if(checkBit(i,j)){
+                    list.add(nums[j]);
                 }
             }
-            ans.add(temp);
+            ans.add(list);
         }
         return ans;
+    }
+
+    public boolean checkBit(int n, int j){
+        if((n&(1<<j))!=0){
+            return true;
+        }
+        return false;
     }
 }
