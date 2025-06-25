@@ -1,78 +1,71 @@
-class Node{
-        int key=0;
-        int val=0;
-        Node prev = null;
-        Node next = null;
-        Node(){
-        }
-  }
-
 class LRUCache {
-
-    HashMap<Integer , Node> hm;
-    Node H = new Node();
-    Node T= new Node();
-    int cap;
-
+    class Node{
+        int key;
+        int val;
+        Node next;
+        Node prev;
+        public Node(){
+        }
+        public Node(int key,int val){
+           this.key=key;
+           this.val=val;
+        }
+    }
+    Map<Integer,Node> map;
+    Node head=new Node();
+    Node tail=new Node();
+    int size;
+    
     public LRUCache(int capacity) {
-       hm = new HashMap<>();
-        H.next = T;
-        T.prev = H; 
-        cap = capacity; 
+        map=new HashMap<>();
+        head.next=tail;
+        tail.prev=head;
+        size=capacity;
     }
     
     public int get(int key) {
-        if(hm.containsKey(key) == false) return -1;
-        else {
-            int ans = hm.get(key).val;
-            Node temp =delete(H , hm.get(key));
-            add(H,T,temp);
-            return ans;
+        if(map.containsKey(key)){
+         Node temp=deleteNode(head,map.get(key));
+           addNode(tail,temp);
+            return map.get(key).val;
+        }else{
+            return -1;
         }
-
     }
     
     public void put(int key, int value) {
-      Node res = hm.get(key);
-        if(res == null){
-            if(hm.size() == cap){
-               hm.remove(H.next.key);  
-               delete(H , H.next);
-            }
-            Node n1 = new Node();
-            n1.key = key;
-            n1.val = value;
-            hm.put(key , n1);
-            add(H,T,n1);   
-        } else {
-            
-            Node temp = delete(H,res);
-            temp.val = value;
-            add(H,T,temp);
-        }  
+          if(map.containsKey(key)){
+            Node rem=deleteNode(head,map.get(key));
+            rem.val=value;
+            map.put(key,rem);
+            addNode(tail,rem);
+          }else{     
+        if(map.size()>=size){
+         Node rem=deleteNode(head,head.next);
+         map.remove(rem.key);
+        }
+        Node node=new Node(key,value);
+          map.put(key,node);
+        addNode(tail,node);
+          }
     }
-
-    public void add(Node H , Node T , Node n1){
-        Node tm1 = T.prev;
-        tm1.next = n1;
-        n1.next = T;
-        
-        T.prev = n1;
-        n1.prev = tm1;
+    public Node deleteNode(Node head,Node temp){
+        Node cm1=temp.prev;
+        Node cp1=temp.next;
+        cm1.next=cp1;
+        cp1.prev=cm1;
+        temp.next=null;
+        temp.prev=null;
+        return temp;
     }
-    public Node delete(Node head , Node d){
-        Node dm1 = d.prev;
-        Node dp1 = d.next;
-        
-        dm1.next = dp1;
-        dp1.prev = dm1;
-        
-        d.next = null;
-        d.prev = null;
-        
-        return d;
+    
+    public void addNode(Node tail,Node temp){
+        Node cm1=tail.prev;
+        cm1.next=temp;
+        temp.next=tail;
+        tail.prev=temp;
+        temp.prev=cm1;
     }
-
 }
 
 /**
