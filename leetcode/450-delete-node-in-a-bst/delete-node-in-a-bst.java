@@ -15,12 +15,12 @@
  */
 class Solution {
     public TreeNode deleteNode(TreeNode root, int key) {
-        if(root!=null && (root.val!=key) && root.left==null && root.right==null){
-            return root;
-        }
-        if(root==null ||(root.left==null && root.right==null)){
-            return null;
-        }
+        // if(root!=null && (root.val!=key) && root.left==null && root.right==null){
+        //     return root;
+        // }
+        // if(root==null ||(root.left==null && root.right==null)){
+        //     return null;
+        // }
         TreeNode curr=root;
        return deleteTreeNode(curr,key);
        // return root;
