@@ -1,49 +1,60 @@
 class Solution {
     public String minWindow(String s, String t) {
-        String ans="";
-        if(s.length()<t.length()){
-            return ans;
-        }
-        Map<Character,Integer> hms=new HashMap<>();
-        Map<Character,Integer> hmt=new HashMap<>();
-        for(int i=0;i<t.length();i++){
-            hmt.put(t.charAt(i),hmt.getOrDefault(t.charAt(i),0)+1);
-        }
-        int size=t.length(),count=0;
-        int start=0,end=0;
-        while(end<s.length()){
-            char ch=s.charAt(end);
-             hms.put(ch,hms.getOrDefault(ch,0)+1);
-             if(hms.get(ch)<=hmt.getOrDefault(ch,0)){
-                count++;
-             }
-             while(count==size){
-                if(ans.equals("")){
-                    ans=s.substring(start,end+1);
-                }else{
-                    ans=ans.length()<end-start+1?ans:s.substring(start,end+1);
-                }
-                hms.put(s.charAt(start),hms.get(s.charAt(start))-1);
-                if(hms.get(s.charAt(start))<hmt.getOrDefault(s.charAt(start),0)){
-                count--;
-                }
-                start++;
-             }
-             end++;
-        }
-        while(count==size){
-                if(ans.equals("")){
-                    ans=s.substring(start,end+1);
-                }else{
-                    ans=ans.length()<end-start+1?ans:s.substring(start,end+1);
-                }
-                hms.put(s.charAt(start),hms.get(s.charAt(start))-1);
-                if(hms.get(s.charAt(start))<hmt.getOrDefault(s.charAt(start),0)){
-                count--;
-                }else{
-                start++;
-                }
-             }
-        return ans;
-    }
-}
+         if(t.length() > s.length()) return ""; 
+        HashMap<Character,Integer> smap = new HashMap<>(); 
+        HashMap<Character,Integer> tmap = new HashMap<>(); 
+        int matchcount = 0; 
+         
+        for(int i = 0; i<t.length(); i++){ 
+            char ch = t.charAt(i); 
+            tmap.put(ch , tmap.getOrDefault(ch,0)+1); 
+        } 
+        int anslen = Integer.MAX_VALUE; 
+        int anssp = 0,ansep = 0; 
+        int sp = 0; 
+        int ep = 0; 
+        while(ep<s.length()){ 
+            if(matchcount == t.length()){ 
+                //release 
+                char ch1 = s.charAt(sp); 
+                if(ep-sp<anslen){ 
+                    anslen = ep-sp; 
+                    anssp = sp; 
+                    ansep = ep; 
+                } 
+                smap.put(ch1, smap.get(ch1)-1); 
+                if(smap.get(ch1) < tmap.getOrDefault(ch1,0)){ 
+                    matchcount--; 
+                } 
+                sp++; 
+            } else { 
+                //acquire 
+                char ch2 = s.charAt(ep); 
+                smap.put(ch2, smap.getOrDefault(ch2,0)+1); 
+                if(smap.get(ch2) <= tmap.getOrDefault(ch2,0)){ 
+                    matchcount++; 
+                } 
+                 
+                ep++; 
+            } 
+              
+        } 
+         
+        while(matchcount==t.length()){ 
+            char ch1 = s.charAt(sp); 
+                if(ep-sp<anslen){ 
+                    anslen = ep-sp; 
+                    anssp = sp; 
+                    ansep = ep; 
+                } 
+                smap.put(ch1, smap.get(ch1)-1); 
+                if(smap.get(ch1) < tmap.getOrDefault(ch1,0)){ 
+                    matchcount--; 
+                } 
+                sp++; 
+             
+        } 
+         
+        return s.substring(anssp , ansep); 
+    } 
+} 
