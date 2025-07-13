@@ -1,41 +1,47 @@
 class Solution {
     public int findCircleNum(int[][] isConnected) {
-        int len=isConnected.length;
-        int wid=isConnected[0].length;
-        int[] arr=new int[len];
-        int[] rank=new int[len];
-        for(int i=0;i<len;i++){
+        int n=isConnected.length;
+        int[] arr=new int[n];
+        int[] rank=new int[n];
+        for(int i=0;i<n;i++){
             arr[i]=i;
             rank[i]=1;
         }
-        for(int i=0;i<len;i++){
-            for(int j=0;j<wid;j++){
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
                 if(isConnected[i][j]==1){
                     int x=i;
                     int y=j;
-                    while(arr[x]!=x){
-                        x=arr[x];
-                    }
-                    while(arr[y]!=y){
-                        y=arr[y];
-                    }
-                     if(rank[x] > rank[y]) { 
-                        arr[y] = x; 
-                    } else if(rank[x] < rank[y]){ 
-                        arr[x] = y; 
-                    } else { 
-                        arr[x] = y; 
-                        rank[y]++; 
-                    }
+                    union(arr,rank,x,y);
                 }
             }
         }
         int count=0;
-        for(int i=0;i<len;i++){
-            if(arr[i]==i){
-                count++;
-            }
+        for(int i=0;i<n;i++){
+           if(arr[i]==i){
+            count++;
+           }
         }
         return count;
+    }
+    public void union(int[] arr,int[] rank,int x,int y){
+          int ax=find(arr,x);
+          int by=find(arr,y);
+          if(arr[ax]!=arr[by]){
+            if(rank[ax]>rank[by]){
+               arr[by]=ax;
+            }else if(rank[ax]<rank[by]){
+                arr[ax]=by;
+            }else{
+                arr[ax]=by;
+                rank[by]++;
+            }
+          }
+    }
+    public int find(int[] arr,int idx){
+          if(arr[idx]==idx){
+            return idx;
+          }
+          return find(arr,arr[idx]);
     }
 }
