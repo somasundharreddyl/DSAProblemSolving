@@ -42,6 +42,8 @@ class Solution {
           if(arr[idx]==idx){
             return idx;
           }
-          return find(arr,arr[idx]);
+          int temp=find(arr,arr[idx]);
+          arr[idx]=temp;
+          return temp;
     }
 }
