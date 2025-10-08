@@ -15,24 +15,23 @@
  */
 class Solution {
     public TreeNode buildTree(int[] preorder, int[] inorder) {
-        return construct(preorder,0,preorder.length-1,inorder,0,inorder.length-1);
+       int pStart=0,pEnd=preorder.length-1,iStart=0,iEnd=inorder.length-1;
+        Map<Integer,Integer> map=new HashMap<>();
+        for(int i=0;i<inorder.length;i++){
+            map.put(inorder[i],i);
+        }
+      return  constructTree(preorder,inorder,pStart,pEnd,iStart,iEnd,map);
     }
-    public TreeNode construct(int[] preorder, int ps, int pe, int[] inorder, int is, int ie){
-        if(ps>pe || is>ie){
+    public TreeNode constructTree(int[] preorder,int[] inorder,int pStart,int pEnd,
+    int iStart,int iEnd,Map<Integer,Integer> map){
+         if(pStart>pEnd || iStart>iEnd){
             return null;
-        }
-        int value=preorder[ps];
-        int idx=0;
-        TreeNode root=new TreeNode(value);
-        for(int i=is;i<=ie;i++){
-            if(value==inorder[i]){
-               idx=i;
-               break;
-            }
-        }
-        int count=idx-is;
-       root.left= construct(preorder,ps+1,ps+count,inorder,is,idx-1);
-       root.right= construct(preorder,ps+count+1,pe,inorder,idx+1,ie);
-       return root;
+         }
+         TreeNode root=new TreeNode(preorder[pStart]);
+         int idx=map.get(preorder[pStart]);
+         int count=idx-iStart;
+         root.left=constructTree(preorder,inorder,pStart+1,pStart+count,iStart,idx-1,map);
+         root.right=constructTree(preorder,inorder,pStart+count+1,pEnd,idx+1,iEnd,map);
+         return root;
     }
 }
