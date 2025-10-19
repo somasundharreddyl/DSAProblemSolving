@@ -14,18 +14,28 @@
  * }
  */
 class Solution {
-    int sum;
+    int sum=0;
     public TreeNode bstToGst(TreeNode root) {
-       sum=0;
-       TreeNode temp=root;
-       greaterSumTree(temp);
-       return root;
+      sum=traverseSum(root);
+      inorderSum(root);
+      return root;
     }
-    public void greaterSumTree(TreeNode root){
-          if(root==null){return;}
-          greaterSumTree(root.right);
-          root.val=root.val+sum;
-          sum=root.val;
-          greaterSumTree(root.left);
+    int traverseSum(TreeNode root){
+        if(root==null){
+            return 0;
+        }
+        int l=traverseSum(root.left);
+        int r=traverseSum(root.right);
+      return l+r+root.val;
+    }
+    void inorderSum(TreeNode root){
+        if(root==null){
+            return;
+        }
+        inorderSum(root.left);
+        int v=root.val;
+        root.val=sum;
+        sum=sum-v;
+        inorderSum(root.right);
     }
 }
