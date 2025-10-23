@@ -15,42 +15,39 @@
  */
 class Solution {
     public TreeNode deleteNode(TreeNode root, int key) {
-        // if(root!=null && (root.val!=key) && root.left==null && root.right==null){
-        //     return root;
-        // }
-        // if(root==null ||(root.left==null && root.right==null)){
-        //     return null;
-        // }
-        TreeNode curr=root;
-       return deleteTreeNode(curr,key);
-       // return root;
+       // if(root==null){return null;}
+        TreeNode temp=root;
+       return deleteXnode(temp,key);
+        
     }
-    public TreeNode deleteTreeNode(TreeNode curr, int key) {
-        if(curr==null){return curr;}   
-        if(curr.val>key){
-            curr.left=deleteTreeNode(curr.left,key);
-        }else if(curr.val<key){
-            curr.right=deleteTreeNode(curr.right,key);
-        }else{
-            if(curr.left==null && curr.right==null){
-                return null;
-            }else if(curr.left==null){
-                return curr.right;
-            }else if(curr.right==null){
-                return curr.left;
-            }else{
-                int keyVal=findMax(curr.left);
-                curr.val=keyVal;
-                curr.left=deleteTreeNode(curr.left,keyVal);
-                return curr;
-            }
+    public TreeNode deleteXnode(TreeNode root,int key){
+        if(root==null){
+            return root;
         }
-        return curr; 
+         if(root.val>key){
+             root.left=deleteXnode(root.left,key);
+         }else if(root.val<key){
+             root.right=deleteXnode(root.right,key);
+         }else{
+            if(root.left==null && root.right==null){
+              return null;
+            }else if(root.left!=null && root.right==null){
+              return root.left;
+            }else if(root.left==null && root.right!=null){
+              return root.right;
+            }else{
+              int v=findLeftHighestNode(root.left);
+              root.val=v;
+            root.left=deleteXnode(root.left,v);
+              return root;
+            }
+         }
+         return root;
     }
-    public int findMax(TreeNode temp){
-       while(temp.right!=null){
-        temp=temp.right;
-       }
-       return temp.val;
-    }
+   public int findLeftHighestNode(TreeNode root){
+        while(root.right!=null){
+            root=root.right;
+        }
+        return root.val;    
+   }
 }
