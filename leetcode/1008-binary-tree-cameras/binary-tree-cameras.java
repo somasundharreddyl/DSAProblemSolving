@@ -29,10 +29,10 @@ class Solution {
         }
         int left=postOrder(root.left);
         int right=postOrder(root.right);
-        if((left==0 && right==0) || (left==0 && right==1) || (left==1 && right==0) || (left==0 && right==2) || (left==2 && right==0) ){
+        if(left==0 || right==0 ){
             cameras++;
             return 1;
-        }else if((left==1 && right==1) || (left==1 && right==2) || (left==2 && right==1)){
+        }else if(left==1 || right==1){
             return 2;
         }else{
             return 0;
