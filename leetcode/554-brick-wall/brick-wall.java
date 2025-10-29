@@ -1,30 +1,20 @@
 class Solution {
     public int leastBricks(List<List<Integer>> wall) {
-       // List<List<Integer>> prefixList=new ArrayList<>();
-        Map<Integer,Integer> countMap=new HashMap<>();
-        for(int i=0;i<wall.size();i++){
-          //  List<Integer> list=new ArrayList<>();
-            List<Integer> w=wall.get(i);
+        Map<Integer,Integer> hm = new HashMap<>();
+        for(List<Integer> l:wall){
             int sum=0;
-            for(int j=0;j<w.size()-1;j++){
-                if(j==0){
-                   countMap.put(w.get(j),countMap.getOrDefault(w.get(j),0)+1);
-                   sum+=w.get(j);
-                }else{
-                    countMap.put(w.get(j)+sum,countMap.getOrDefault(w.get(j)+sum,0)+1);
-                   sum+=w.get(j);
-                }
+            for(int i=0;i<l.size()-1;i++){
+                sum+=l.get(i);
+                hm.put(sum,hm.getOrDefault(sum,0)+1);
             }
-          // prefixList.add(list); 
         }
-        if(countMap.size()<=0){
-            return wall.size();
+        int max=0;
+        if(hm.size()>0){
+        for(int key:hm.keySet()){
+            max=max>hm.get(key)?max:hm.get(key);
         }
-        int max=Integer.MIN_VALUE;
-        for(int key:countMap.keySet()){
-            max=max>countMap.get(key)?max:countMap.get(key);
         }
         return wall.size()-max;
-
     }
 }
+
