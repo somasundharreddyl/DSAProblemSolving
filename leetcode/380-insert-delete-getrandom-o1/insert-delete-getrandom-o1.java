@@ -1,54 +1,46 @@
 class RandomizedSet {
 
-    List<Integer> arrList;
     Map<Integer,Integer> hm;
+    List<Integer> list;
     Random r;
+
     public RandomizedSet() {
-      arrList=new ArrayList<>();
-      r=new Random();
-      hm=new HashMap<>();  
+       hm=new HashMap<>();
+       list=new ArrayList<>(); 
+       r=new Random();
     }
     
     public boolean insert(int val) {
         if(!hm.containsKey(val)){
-           arrList.add(val);
-           hm.put(val,arrList.size()-1);
-           return true;
-        }else{
-            return false;
+          list.add(val);
+          int idx=list.size()-1;
+         hm.put(val,idx);
+         return true;
         }
+        return false;
     }
     
     public boolean remove(int val) {
-         if (hm.containsKey(val) == false) { 
-            return false; 
-        } 
- 
-        int idx = hm.get(val); 
-          hm.remove(val); 
-        if (idx == arrList.size()-1) { 
-            arrList.remove(arrList.size()-1); 
-            return true; 
-        } 
-        int idx2 = arrList.size()-1; 
-        int temp = arrList.get(idx2); 
-        swap(idx,idx2); 
-        arrList.remove(arrList.size()-1); 
-         
-        hm.put(temp,idx); 
-        return true; 
+        if(hm.containsKey(val)){
+           int idx1=hm.get(val);
+           hm.remove(val);
+           int idx2=list.size()-1;
+           if(idx1!=idx2){
+             int temp=list.get(idx1);
+             list.set(idx1,list.get(idx2));
+             list.set(idx2,temp);
+             hm.put(list.get(idx1),idx1);
+           }
+           list.remove(idx2);
+
+           return true;
+        }
+        return false;
     }
     
     public int getRandom() {
-        int idx=r.nextInt(0,arrList.size());
-        return arrList.get(idx);
-    }
-
-     public void swap(int i,int j){ 
-        int a = arrList.get(i); 
-        int b = arrList.get(j); 
-        arrList.set(i,b); 
-        arrList.set(j,a); 
+        int idx=r.nextInt(0,list.size());
+        return list.get(idx);
     }
 }
 
