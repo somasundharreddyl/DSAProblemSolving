@@ -1,34 +1,38 @@
 class Solution {
 
-    Map<Integer,Integer> hm;
+    Map<Integer,Integer> hMap;
+    int n;
+    int[] blacklist;
+    int size;
     Random r;
-    int valid;
-    public Solution(int n, int[] blacklist) {
-     r=new Random();
-     hm=new HashMap<>();
-     valid=n-blacklist.length;
-     for(int i=0;i<blacklist.length;i++){
-        hm.put(blacklist[i],-1);
-     }
-     int val=n-1;
-     for(int i=0;i<blacklist.length;i++){
-        if(blacklist[i]<valid){
-            while(hm.containsKey(val)){
-               val--;
-            }
-            hm.put(blacklist[i],val);
-            val--;
-        }
-     }
 
+    public Solution(int n, int[] blacklist) {
+      this.n=n;
+      this.blacklist=blacklist;
+      r=new Random();
+      hMap=new HashMap<>();
+      for(int i=0;i<blacklist.length;i++){
+        hMap.put(blacklist[i],-1);
+      }
+      size=n-blacklist.length;
+      int k=n-1;
+      for(int i=0;i<blacklist.length;i++){
+        if(blacklist[i]<size){
+            while(hMap.containsKey(k)){
+                k--;
+            }
+            hMap.put(blacklist[i],k);
+            k--;
+        }
+      }  
     }
     
     public int pick() {
-      int n= r.nextInt(0,valid);
-      if(hm.containsKey(n)){
-        return hm.get(n);
-      }
-      return n;
+        int n=r.nextInt(0,size);
+        if(hMap.containsKey(n)){
+            return hMap.get(n);
+        }
+        return n;
     }
 }
 
