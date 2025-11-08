@@ -1,41 +1,46 @@
 class Solution {
-    
     public List<Integer> findAnagrams(String s, String p) {
-        Map<Character,Integer> hms=new HashMap<>();
-        Map<Character,Integer> hmp=new HashMap<>();
+        int pSize=p.length();
+        int sSize=s.length();
         List<Integer> ans=new ArrayList<>();
-        if(p.length()>s.length()){return ans;}
-        int size=p.length();
+        if(pSize>sSize){
+            return ans;
+        }
+        Map<Character,Integer> pMap=new HashMap<>();
+        Map<Character,Integer> sMap=new HashMap<>();
         for(int i=0;i<p.length();i++){
-            hmp.put(p.charAt(i),hmp.getOrDefault(p.charAt(i),0)+1);   
+            pMap.put(p.charAt(i),pMap.getOrDefault(p.charAt(i),0)+1);
         }
-        int count=0;
-        int start=0,end=size-1;
-        for(int i=start;i<=end;i++){
-            hms.put(s.charAt(i),hms.getOrDefault(s.charAt(i),0)+1);
-            if(hms.get(s.charAt(i))<=hmp.getOrDefault(s.charAt(i),0)){
-                     count++;
+            for(int j=0;j<pSize;j++){
+                sMap.put(s.charAt(j),sMap.getOrDefault(s.charAt(j),0)+1);
             }
-        }
-        if(size==count){
-            ans.add(start);
-        }
-        start++;
-        end++;
-        while(end<s.length()){
-            hms.put(s.charAt(start-1),hms.get(s.charAt(start-1))-1);
-            if(hms.get(s.charAt(start-1))<hmp.getOrDefault(s.charAt(start-1),0)){
-                     count--;
+            int matchCount=0;
+            for(char key:pMap.keySet()){
+               if(sMap.containsKey(key)){
+                  if(sMap.get(key)<=pMap.get(key)){
+                      matchCount+=sMap.get(key); 
+                  }else{
+                    matchCount+=pMap.get(key);
+                  }   
+               }
             }
-            hms.put(s.charAt(end),hms.getOrDefault(s.charAt(end),0)+1);
-            if(hms.get(s.charAt(end))<=hmp.getOrDefault(s.charAt(end),0)){
-                     count++;
+            if(pSize==matchCount){
+               ans.add(0);
+            }    
+        
+         for(int i=1;i<=s.length()-pSize;i++){
+            if(pMap.containsKey(s.charAt(i-1)) && sMap.get(s.charAt(i-1))<=pMap.get(s.charAt(i-1))){
+                matchCount--;
             }
-             if(size==count){
-            ans.add(start);
-        }
-        start++;
-        end++;
+            sMap.put(s.charAt(i-1),sMap.get(s.charAt(i-1))-1);
+            sMap.put(s.charAt(i+pSize-1),sMap.getOrDefault(s.charAt(i+pSize-1),0)+1);
+            if(pMap.containsKey(s.charAt(i+pSize-1)) && sMap.get(s.charAt(i+pSize-1))<=(pMap.get(s.charAt(i+pSize-1)))){
+                matchCount++;
+            }  
+            
+           if(pSize==matchCount){
+               ans.add(i);
+            }
         }
         return ans;
     }
