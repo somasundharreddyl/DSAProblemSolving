@@ -1,32 +1,38 @@
 class Solution {
     public int[] asteroidCollision(int[] asteroids) {
-        Stack<Integer> stack = new Stack<>();
-        int i=0;
-        while(i<asteroids.length){
-            if(stack.size()==0){
+        Stack<Integer> stack=new Stack<>();
+        for(int i=0;i<asteroids.length;i++){
+          if(stack.size()==0){
+            stack.push(asteroids[i]);
+            continue;
+          }
+          if(stack.size()>0 && (stack.peek()>=0 && asteroids[i]<0) ){
+            while(stack.size()>0 && (stack.peek()>=0 && asteroids[i]<0)){
+             if(Math.abs(asteroids[i])<stack.peek()){
+                break;
+             }else if(Math.abs(asteroids[i])==stack.peek()){
+                stack.pop();
+                break;
+             }else{
+                stack.pop();
+                if(stack.size()==0 || stack.peek()<0){
                 stack.push(asteroids[i]);
-                i++;
-                continue;
+                break;
             }
-            if(asteroids[i]<0 && stack.peek()>=0 && (Math.abs(asteroids[i])<stack.peek())){
-                 i++;
-            }else if(asteroids[i]<0 && stack.peek()>=0 && (Math.abs(asteroids[i])>stack.peek())){
-                 stack.pop();
-            }else if(asteroids[i]<0 && stack.peek()>=0 && (Math.abs(asteroids[i])==stack.peek())){
-                 stack.pop();
-                 i++;
+             }
             }
-            else{
-                stack.push(asteroids[i]);
-                i++;
-            }
+             
+          }else{
+          stack.push(asteroids[i]);
+          }
+        }
+        if(stack.size()==0){
+            return new int[]{};
         }
         int[] ans=new int[stack.size()];
-        int j=ans.length-1;
-        while(j>=0){
-            ans[j]=stack.pop();
-                  j--;
+        for(int i=ans.length-1;i>=0;i--){
+            ans[i]=stack.pop();
         }
         return ans;
-}
+    }
 }
