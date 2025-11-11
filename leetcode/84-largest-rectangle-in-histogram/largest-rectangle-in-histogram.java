@@ -1,55 +1,51 @@
 class Solution {
     public int largestRectangleArea(int[] heights) {
-        int n=heights.length;
-        int[] rse=new int[n];
-        int[] lse=new int[n];
-        Arrays.fill(rse,-1);
-        Arrays.fill(lse,-1);
-        Stack<Integer> st1=new Stack<>();
-        Stack<Integer> st2=new Stack<>();
-        st1.push(0);
-        for(int i=1;i<n;i++){
-           while(st1.size()>0 && heights[st1.peek()]>heights[i]){
-            rse[st1.pop()]=i;
-           }
-           st1.push(i);
-        }
-        st2.push(n-1);
-        for(int i=n-2;i>=0;i--){
-           while(st2.size()>0 && heights[st2.peek()]>heights[i]){
-            lse[st2.pop()]=i;
-           }
-           st2.push(i);
-        }
-        int maxArea=Integer.MIN_VALUE;
-        for(int i=0;i<n;i++){
-            if(i==0){
-            int w=(rse[i]-1)-i+1;
-            if(rse[i]==-1){
-                w=n;
+        int[] lsn=new int[heights.length];
+        int[] rsn=new int[heights.length];
+        Arrays.fill(lsn,-1);
+        Arrays.fill(rsn,-1);
+        Stack<Integer> leftStack=new Stack<>();
+        Stack<Integer> rightStack=new Stack<>();
+        for(int i=0;i<heights.length;i++){
+            if(rightStack.size()==0){
+               rightStack.push(i); 
+               continue;
             }
-            int area=w*heights[i];
-            maxArea=maxArea>area?maxArea:area;
-            }else if(i==n-1){
-            int w=i-(lse[i]+1)+1;
-            if(lse[i]==-1){
-                w=n;
+            while(rightStack.size()>0 && heights[rightStack.peek()]>heights[i]){
+                rsn[rightStack.pop()]=i;
             }
-            int area=w*heights[i];
-            maxArea=maxArea>area?maxArea:area;
+            rightStack.push(i);
+        }
+        for(int i=heights.length-1;i>=0;i--){
+            if(leftStack.size()==0){
+               leftStack.push(i); 
+               continue;
+            }
+            while(leftStack.size()>0 && heights[leftStack.peek()]>heights[i]){
+                lsn[leftStack.pop()]=i;
+            }
+            leftStack.push(i);
+        }
+        int ans=0;
+        for(int i=0;i<heights.length;i++){
+            if(lsn[i]<0 && rsn[i]<0){
+               int width=heights.length;
+               ans=ans>(heights[i]*width)?ans:(heights[i]*width); 
+            }else if(lsn[i]>=0 && rsn[i]>0){
+               int width=(rsn[i]-1)-(lsn[i]+1)+1;
+               ans=ans>(heights[i]*width)?ans:(heights[i]*width);
+            }else if(lsn[i]>=0 && rsn[i]<0){
+               int width=(heights.length-1)-(lsn[i]+1)+1;
+               ans=ans>(heights[i]*width)?ans:(heights[i]*width);
             }else{
-                int w=rse[i]-1-(lse[i]+1)+1;
-                if(rse[i]==-1 && lse[i]==-1){
-                    w=n;
-                }else if(lse[i]==-1){
-                  w=rse[i];
-                }else if(rse[i]==-1){
-                   w=n-1-(lse[i]+1)+1; 
-                }
-            int area=w*heights[i];
-            maxArea=maxArea>area?maxArea:area; 
+                int width=rsn[i];
+               ans=ans>(heights[i]*width)?ans:(heights[i]*width); 
             }
         }
-        return maxArea;
+       return ans;
     }
 }
+//2,1,5
+//5,1,2
+//-1,-1,1
+//
