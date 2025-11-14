@@ -1,57 +1,61 @@
 class Solution {
     public int calculate(String s) {
-        Stack<Integer> operands=new Stack<>();
         Stack<Character> operators=new Stack<>();
-        for(int i=0;i<s.length();i++){
+        Stack<Integer> operands=new Stack<>();
+        int i=0;
+        while(i<s.length()){
             if(s.charAt(i)>='0' && s.charAt(i)<='9'){
                 int num=0;
                 while(i<s.length() && s.charAt(i)>='0' && s.charAt(i)<='9'){
-                    int a=s.charAt(i)-'0';
-                    num=(num*10)+a;
-                    i++;
+                  num=num*10+(s.charAt(i)-'0');  
+                  i++;
                 }
                 operands.push(num);
                 i--;
-            }else if(s.charAt(i)=='+' || s.charAt(i)=='-' || s.charAt(i)=='*' || s.charAt(i)=='/'){
-                
-                  while(operators.size()>0 && precedence(s.charAt(i))<=precedence(operators.peek())){
-                    int val2=operands.pop();
-                    int val1=operands.pop();
-                    char c=operators.pop();
-                    int cal=calculate(val1,val2,c);
-                    operands.push(cal);
-                  }
-            
+            }else if(s.charAt(i)>='(' || s.charAt(i)>=')' || s.charAt(i)>='+' || s.charAt(i)>='-'
+            || s.charAt(i)>='*' || s.charAt(i)>='/' || s.charAt(i)>='^'){
+                while(operators.size()>0 && precedence(operators.peek())>=precedence(s.charAt(i))){
+                  int num2=operands.pop();
+                  int num1=operands.pop();
+                  char ops=operators.pop();
+                  int res=calc(num1,num2,ops);
+                  operands.push(res);
+                }
                 operators.push(s.charAt(i));
             }
+            i++;
         }
         while(operators.size()>0){
-                    int val2=operands.pop();
-                    int val1=operands.pop();
-                    char c=operators.pop();
-                    int cal=calculate(val1,val2,c);
-                    operands.push(cal);
+            int num2=operands.pop();
+                  int num1=operands.pop();
+                  char ops=operators.pop();
+                  int res=calc(num1,num2,ops);
+                  operands.push(res);
         }
         return operands.pop();
     }
-    public int precedence(char ch){
-        if(ch=='+' || ch=='-'){
-            return 1;
-        }else if(ch=='*' || ch=='/'){
-            return 2;
+
+    public int calc(int n1, int n2, char op){
+        if(op=='+'){
+            return n1+n2;
+        }else if(op=='-'){
+            return n1-n2;
+        }else if(op=='*'){
+            return n1*n2;
         }else{
-            return 3;
+            return n1/n2;
         }
     }
-    public int calculate(int a,int b,char c){
-        if(c=='+'){
-            return a+b;
-        }else if(c=='-'){
-            return a-b;
-        }else if(c=='*'){
-            return a*b;
+
+    public int precedence(char ch){
+        if(ch=='^'){
+            return 2;
+        }else if(ch=='*' || ch=='/'){
+            return 1;
+        }else if(ch=='('){
+            return -1;
         }else{
-            return a/b;
+            return 0;
         }
     }
 }
