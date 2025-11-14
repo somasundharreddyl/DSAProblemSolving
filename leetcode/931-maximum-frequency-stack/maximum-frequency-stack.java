@@ -1,35 +1,31 @@
 class FreqStack {
-
-    Map<Integer,Stack<Integer>> stackMap;
-    Map<Integer,Integer> freqMap;
+    Map<Integer,Integer> countMap;
+    Map<Integer,Stack<Integer>> hMap;
     public FreqStack() {
-        stackMap=new HashMap<>();
-        freqMap=new HashMap<>();
+       countMap=new HashMap<>();
+       hMap=new HashMap<>(); 
     }
     
     public void push(int val) {
-        int freq=freqMap.getOrDefault(val,0)+1;
-        freqMap.put(val,freq);
-        if(stackMap.containsKey(freq)){
-           Stack<Integer> st=stackMap.get(freq);
-           st.push(val);
-           stackMap.put(freq,st);
+        countMap.put(val,countMap.getOrDefault(val,0)+1);
+        int freq=countMap.get(val);
+        if(hMap.containsKey(freq)){
+          hMap.get(freq).push(val);
         }else{
-           Stack<Integer> st=new Stack<>();
-           st.push(val);
-           stackMap.put(freq,st);  
+          Stack<Integer> stack=new Stack<>();
+          stack.push(val);
+          hMap.put(freq,stack);
         }
     }
     
     public int pop() {
-        int size=stackMap.size();
-        Stack<Integer> st=stackMap.get(size);
-        int rem=st.pop();
-        freqMap.put(rem,freqMap.get(rem)-1);
-        if(st.size()==0){
-            stackMap.remove(size);
-        }
-        return rem;
+       int size=hMap.size();
+      int res=hMap.get(size).pop();
+      countMap.put(res,countMap.get(res)-1);
+      if(hMap.get(size).size()==0){
+        hMap.remove(size);
+      } 
+      return res;
     }
 }
 
