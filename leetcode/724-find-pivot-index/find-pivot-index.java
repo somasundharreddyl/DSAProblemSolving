@@ -1,22 +1,30 @@
 class Solution {
-    public int[] prefixSum(int[] arr){
-        for(int i=1;i<arr.length;i++){
-            arr[i]=arr[i]+arr[i-1];
-        }
-        return arr;
-    }
     public int pivotIndex(int[] nums) {
-        int[] prefixSum=prefixSum(nums);
-          int n=nums.length;
-        for(int i=0;i<n;i++){
-            if((i==0) && (prefixSum[n-1]-prefixSum[i]==0)){
-                   return i;
-            }else if((i==n-1) && (prefixSum[n-2]==0)){
-               return i;
-            }
-            else if((i!=0) && (i!=n-1) && prefixSum[i-1]==(prefixSum[n-1]-prefixSum[i])){
+        int[] prefixSum=new int[nums.length];
+        prefixSum[0]=nums[0];
+        for(int i=1;i<nums.length;i++){
+        prefixSum[i]=prefixSum[i-1]+nums[i];
+        }
+        for(int i=0;i<nums.length;i++){
+            if(i==0){
+                int left=0;
+                int right=prefixSum[nums.length-1]-prefixSum[i];
+              if(left == right){
                 return i;
-            }   
+              }
+            }else if(i==nums.length-1){
+              int left=prefixSum[nums.length-2];
+              int right=0;
+              if(left == right){
+                return i;
+              }
+            }else{
+              int left=prefixSum[i-1];
+              int right=prefixSum[nums.length-1]-prefixSum[i];
+              if(left == right){
+                return i;
+              }
+            }
         }
         return -1;
     }
