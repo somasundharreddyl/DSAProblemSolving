@@ -1,26 +1,22 @@
 class Solution {
     public int trap(int[] height) {
-        int[] prefixMax=new int[height.length];
-        int[] suffixMax=new int[height.length];
-        int ans=0;
-        prefixMax[0]=height[0];
-        for(int i=1;i<height.length;i++){
-          prefixMax[i]=height[i]>prefixMax[i-1]?height[i]:prefixMax[i-1];
-        }
-        suffixMax[height.length-1]=height[height.length-1];
-        for(int i=height.length-2;i>=0;i--){
-           suffixMax[i]=height[i]>suffixMax[i+1]?height[i]:suffixMax[i+1];
-        }
-        for(int i=1;i<height.length-1;i++){
-            int min=Math.min(prefixMax[i-1],suffixMax[i+1]);
-            if(min>height[i]){
-                ans=ans+min-height[i];
-            } 
-        }
-        return ans;
+       int[] prefMax=new int[height.length];
+       int[] suffMax=new int[height.length];
+       int units=0;
+       prefMax[0]=height[0];
+       for(int i=1;i<height.length;i++){
+        prefMax[i]=prefMax[i-1]>height[i]?prefMax[i-1]:height[i]; 
+       } 
+       suffMax[height.length-1]=height[height.length-1];
+       for(int i=height.length-2;i>=0;i--){
+        suffMax[i]=suffMax[i+1]>height[i]?suffMax[i+1]:height[i];
+       }
+       for(int i=1;i<height.length-1;i++){
+         if(height[i]<prefMax[i-1] && height[i]<suffMax[i+1]){
+           int minH=prefMax[i-1]<suffMax[i+1]?prefMax[i-1]:suffMax[i+1];
+           units+=(minH-height[i]);
+         }
+       }
+       return units;
     }
 }
-
-//4,4,4,4,4,5
-//5,5,5,5,5,5
-//2+4+1+2
