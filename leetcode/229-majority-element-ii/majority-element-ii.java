@@ -1,65 +1,39 @@
 class Solution {
     public List<Integer> majorityElement(int[] nums) {
         List<Integer> ans=new ArrayList<>();
-        int count1=0,count2=0;
-        if(nums.length==1){
-            ans.add(nums[0]);
-            return ans;
-        }
-        if(nums.length==2){
-            if(nums[0]==nums[1]){
-            ans.add(nums[0]);
-            }else{
-                ans.add(nums[0]);
-                ans.add(nums[1]);
+        int freq1=0,freq2=0,ans1=Integer.MIN_VALUE,ans2=Integer.MIN_VALUE;  //freq1=0,ans1=2,   freq2=1,ans2=1
+        for(int i=0;i<nums.length;i++){
+            if((freq1==0 || ans1==nums[i]) && ans2!=nums[i]){
+                freq1++;
+                ans1=nums[i];
+                continue;
             }
-            return ans;
-        }
-        int val1=nums[0],val2=nums[0],freq1=1,freq2=0;
-
-        for(int i=1;i<nums.length;i++){
-          
-           if(val1==nums[i]){
-                  freq1++;
-                  continue;
-            }else{
-                if(freq1==0 && val2!=nums[i]){
-                    val1=nums[i];
-                    freq1++;
-                    continue;
-                }
+            if(freq2==0 || ans2==nums[i]){ //
+                freq2++;
+                ans2=nums[i];
+                continue;
             }
-
-            if(val2==nums[i]){
-                  freq2++;
-                  continue;
-            }else{
-                if(freq2==0){
-                    val2=nums[i];
-                    freq2++;
-                    continue;
-                }  
+            if(nums[i]!=ans1 && nums[i]!=ans2){
+                freq1--;
+                freq2--;
+            }
         }
-            freq1--;
-            freq2--;
+        int c1=0,c2=0;
+        for(int i=0;i<nums.length;i++){
+            if(nums[i]==ans1){
+                c1++;
+            }
         }
-        if(val1==val2){
-            ans.add(val1);
-            return ans;
+        if(c1>nums.length/3){
+            ans.add(ans1);
         }
         for(int i=0;i<nums.length;i++){
-            if(val1==nums[i]){
-                count1++;
-            }
-            if(val2==nums[i]){
-                count2++;
+            if(nums[i]==ans2){
+                c2++;
             }
         }
-        if(count1>nums.length/3){
-             ans.add(val1);
-        }
-        if(count2>nums.length/3){
-             ans.add(val2);
+        if(c2>nums.length/3){
+            ans.add(ans2);
         }
         return ans;
     }
