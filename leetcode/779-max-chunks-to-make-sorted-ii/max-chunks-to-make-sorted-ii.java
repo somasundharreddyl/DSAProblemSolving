@@ -1,22 +1,22 @@
 class Solution {
     public int maxChunksToSorted(int[] arr) {
-        int max=Integer.MIN_VALUE;
-        int min=Integer.MAX_VALUE;
-        int[] prefixMin=new int[arr.length];
-        int count=0;
-        for(int i=arr.length-1;i>=0;i--){
-            min=min<arr[i]?min:arr[i];
-            prefixMin[i]=min;
+        int chunks=0;
+        int[] suffMinArr=new int[arr.length];
+        suffMinArr[arr.length-1]=arr[arr.length-1];
+        for(int i=arr.length-2;i>=0;i--){
+           suffMinArr[i]=suffMinArr[i+1]<arr[i]?suffMinArr[i+1]:arr[i];
         }
-        
+        int maxIdx=-1;
         for(int i=0;i<arr.length-1;i++){
-            max=max>arr[i]?max:arr[i];
-            if(max<=prefixMin[i+1]){
-               count++;
+            if(i==0){
+                maxIdx=0;
+            }else{
+                maxIdx=arr[maxIdx]>arr[i]?maxIdx:i;
+            }
+            if(arr[maxIdx]<=suffMinArr[i+1]){
+               chunks++;
             }
         }
-        return count+1;
+        return chunks+1;
     }
 }
-
-//1,1,3,4,4
