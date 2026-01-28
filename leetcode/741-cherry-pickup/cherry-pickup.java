@@ -1,51 +1,40 @@
 class Solution {
     public int cherryPickup(int[][] grid) {
-        int row1=grid.length,col1=grid[0].length,row2=grid.length;
-        int[][][] dp=new int[row1][col1][row2];
-        Arrays.stream(dp)
-              .forEach(twoD -> Arrays.stream(twoD)
-                                      .forEach(oneD -> Arrays.fill(oneD, -1)));
-        int ans= cPu(grid,dp,row1-1,col1-1,row2-1);   
-        if(ans == Integer.MIN_VALUE){
+        int[][][] dp=new int[grid.length][grid[0].length][grid.length];
+        for(int[][] arr:dp){
+            for(int[] d:arr){
+                Arrays.fill(d,-1);
+            }
+        }
+        int ans=maxCherryPickup(grid,grid.length-1,grid[0].length-1,grid.length-1,dp);
+        if(ans<0){
             return 0;
         }else{
             return ans;
-        }                          
+        }
     }
-
-    public int cPu(int[][] grid,int[][][] dp,int row1,int col1,int row2){
-        int col2=row1+col1-row2;
-        if(row1<0 || row2<0 || col1<0 || col2<0 || grid[row1][col1]==-1 || grid[row2][col2]==-1){
+    public int maxCherryPickup(int[][] grid,int x1,int y1,int x2,int[][][]dp){
+         int y2=x1+y1-x2;
+         if(x1<0 || x2<0 || y1<0 || y2<0 || grid[x1][y1]==-1 || grid[x2][y2]==-1){
             return Integer.MIN_VALUE;
-        }
-        if(row1==0&&col1==0&&row2==0&&col2==0){
-            return grid[row1][col1];
-        }
-        if(dp[row1][col1][row2]!=-1){
-            return dp[row1][col1][row2];
-        }
-
-        int a=cPu(grid,dp,row1-1,col1,row2-1);
-        int b=cPu(grid,dp,row1,col1-1,row2);
-        int c=cPu(grid,dp,row1-1,col1,row2);
-        int d=cPu(grid,dp,row1,col1-1,row2-1);
-
-       int max = Math.max(Math.max(Math.max(a, b), c), d);
-
-       int rem=0;
-       if(row1==row2 && col1==col2){
-           rem=grid[row1][col1];
-       }else{
-           rem=grid[row1][col1]+grid[row2][col2];
-       }
-
-      if(max == Integer.MIN_VALUE){
-            dp[row1][col1][row2] = Integer.MIN_VALUE;
-            return Integer.MIN_VALUE;
-
-        }else{
-             dp[row1][col1][row2] = max+rem;
-             return max+rem;
-        }
+         }
+         if(x1==0 && x2==0 && y1==0 && y2==0){
+            return grid[x1][y1];
+         }
+         if(dp[x1][y1][x2]!=-1){
+            return dp[x1][y1][x2];
+         }
+         int a=maxCherryPickup(grid,x1-1,y1,x2-1,dp);
+         int b=maxCherryPickup(grid,x1,y1-1,x2,dp);
+         int c=maxCherryPickup(grid,x1-1,y1,x2,dp);
+         int d=maxCherryPickup(grid,x1,y1-1,x2-1,dp);
+         int contri=0;
+         if(x1==x2 && y1==y2){
+            contri=grid[x1][y1];
+         }else{
+            contri=grid[x1][y1]+grid[x2][y2];
+         }
+         dp[x1][y1][x2]=contri+Math.max(Math.max(a,b),Math.max(c,d));
+         return contri+Math.max(Math.max(a,b),Math.max(c,d));
     }
 }
