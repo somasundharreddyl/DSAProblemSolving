@@ -1,47 +1,40 @@
 class Solution {
     public boolean canFinish(int numCourses, int[][] prerequisites) {
-         HashMap<Integer,ArrayList<Integer>> hmap = new 
-HashMap<>(); 
- 
-        Queue<Integer> q = new LinkedList<>(); 
-        int[] inDegree = new int[numCourses]; 
-         
-        //put the mapping in HashMap and calculate inDegree 
-         
-         
-        for(int[] p : prerequisites){ 
-            int start = p[1]; 
-            int end = p[0]; 
-             
-            inDegree[end]++; 
- 
-            if(!hmap.containsKey(start)){ 
-                hmap.put(start , new ArrayList<Integer>()); 
-            } 
-            hmap.get(start).add(end); 
-             
-        } 
-         
-        for(int i = 0 ; i < inDegree.length ; i++){ 
-            if(inDegree[i] == 0){ 
-                q.add(i); 
-            } 
-        } 
-         
-        while(!q.isEmpty()){ 
-            int removed = q.poll(); 
-             
-            if(hmap.containsKey(removed)){ 
-                for(int r : hmap.get(removed)){ 
-                    inDegree[r]--; 
-                    if(inDegree[r] == 0){ 
-                        q.add(r); 
-                    } 
-                } 
-            } 
-            numCourses--; 
-         } 
-         
-        return numCourses == 0;
+        //ArrayList<Integer> ans=new ArrayList<>();
+        ArrayList<ArrayList<Integer>> graph=new ArrayList<>();
+        Queue<Integer> q=new LinkedList<>();
+        int[] indegree=new int[numCourses];
+        for(int i=0;i<numCourses;i++){
+            graph.add(new ArrayList<>());
+        }
+        for(int i=0;i<prerequisites.length;i++){
+            int x=prerequisites[i][0];
+            int y=prerequisites[i][1];
+            graph.get(x).add(y);
+            indegree[y]++;
+        }
+        for(int i=0;i<numCourses;i++){
+            if(indegree[i]==0){
+                q.add(i);
+                //ans.add(i);
+            }
+        }
+        while(q.size()>0){
+            int rem=q.remove();
+            List<Integer> list=graph.get(rem);
+            for(int i=0;i<list.size();i++){
+                indegree[list.get(i)]--;
+                if(indegree[list.get(i)]==0){
+                    q.add(list.get(i));
+                   // ans.add(list.get(i));
+                }
+            }
+        }
+        for(int n:indegree){
+            if(n!=0){
+                return false;
+            }
+        }
+        return true;
     }
 }
