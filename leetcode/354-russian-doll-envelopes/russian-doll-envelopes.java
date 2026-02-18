@@ -1,44 +1,44 @@
 class Solution {
     public int maxEnvelopes(int[][] envelopes) {
-        Pair[] pairs=new Pair[envelopes.length];
-        for(int i=0;i<envelopes.length;i++){
-            pairs[i]=new Pair(envelopes[i][0],envelopes[i][1]);
+        Dimension[] dim=new Dimension[envelopes.length];
+        for(int i=0;i<dim.length;i++){
+            Dimension d=new Dimension(envelopes[i][0],envelopes[i][1]);
+            dim[i]=d;
         }
-        Arrays.sort(pairs,new Pair());
-        int[] dp=new int[pairs.length];
-        dp[0]=pairs[0].y;
-        int ans=1;
-        for(int i=1;i<pairs.length;i++){
-            int l=0,h=ans;
-            while(l<h){
-                int m=l+(h-l)/2;
-                if(dp[m]<pairs[i].y){
-                    l=m+1;
+        Arrays.sort(dim);
+        int[] dp=new int[dim.length];
+        int ans=0;
+        for(int i=0;i<dim.length;i++){
+            int start=0,end=ans;
+            while(start<end){
+                int mid=start+(end-start)/2;
+                if(dp[mid]<dim[i].y){
+                  start=mid+1;
                 }else{
-                    h=m;
+                  end=mid;
                 }
             }
-            dp[l]=pairs[i].y;
-            if(l==ans){ans++;}
+            dp[start]=dim[i].y;
+            if(ans==start){
+                ans++;
+            }
         }
-        return ans--;
+        return ans;
     }
+    
 }
-class Pair implements Comparator<Pair>{
+class Dimension implements Comparable<Dimension>{
     int x;
     int y;
-    public Pair(int x, int y){
+    public Dimension(int x,int y){
         this.x=x;
         this.y=y;
     }
-    public Pair(){
-    }
-    
-    public int compare(Pair p1,Pair p2){
-        if(p1.x==p2.x){
-            return p2.y-(p1.y);
-        }else{
-            return p1.x-(p2.x);
-        }
+    @Override
+    public int compareTo(Dimension d){
+      if(this.x==d.x){
+        return d.y-this.y;
+      }  
+      return this.x-d.x;
     }
 }
