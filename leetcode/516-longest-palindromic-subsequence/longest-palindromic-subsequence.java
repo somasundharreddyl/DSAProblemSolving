@@ -1,34 +1,30 @@
 class Solution {
     public int longestPalindromeSubseq(String s) {
         String text1=s;
-        String text2="";
-        for(int i=s.length()-1;i>=0;i--){
-           text2=text2+s.charAt(i);
+        StringBuilder sb=new StringBuilder(s);
+        String text2=sb.reverse().toString();
+        int[][] dp=new int[text1.length()][text2.length()];
+        for(int[] d:dp){
+            Arrays.fill(d,-1);
         }
-         int[][] dp=new int[text1.length()][text2.length()];
-        int p1=text1.length(),p2=text2.length();
-        int max=-1;
-        for(int i=0;i<p1;i++){
-            for(int j=0;j<p2;j++){
-              if(text1.charAt(i)==text2.charAt(j)){
-                if(i-1>=0 && j-1>=0){
-                 dp[i][j]=1+dp[i-1][j-1];
-                }else{
-                 dp[i][j]=1;
-                }  
-              }else if(i-1>=0 && j-1>=0){
-                dp[i][j]=Math.max(dp[i-1][j],dp[i][j-1]);
-              }else if(i-1>=0){
-                dp[i][j]=dp[i-1][j];
-              }else if(j-1>=0){
-                dp[i][j]=dp[i][j-1];
-              }else{
-                dp[i][j]=0;
-              }
-              max=max>dp[i][j]?max:dp[i][j];
-            }
-        }
-        return max;
+        return lcs(text1,text2,text1.length()-1,text2.length()-1,dp);
+        
     }
+    public int lcs(String text1, String text2,int p1, int p2,int[][] dp){
+         if(p1<0 || p2<0){
+            return 0;
+         }
 
+         if(dp[p1][p2]!=-1){return dp[p1][p2];}
+
+         if(text1.charAt(p1)==text2.charAt(p2)){
+            dp[p1][p2]=1+lcs(text1,text2,p1-1,p2-1,dp);
+            return 1+lcs(text1,text2,p1-1,p2-1,dp);
+         }else{
+            int x=lcs(text1,text2,p1-1,p2,dp);
+            int y=lcs(text1,text2,p1,p2-1,dp);
+            dp[p1][p2]=Math.max(x,y);
+            return Math.max(x,y);
+         }
+    }
 }
