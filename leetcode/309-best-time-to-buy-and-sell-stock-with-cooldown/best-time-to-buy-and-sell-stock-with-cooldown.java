@@ -1,16 +1,14 @@
 class Solution {
     public int maxProfit(int[] prices) {
-        int buyingProfit=prices[0]*-1;
-        int sellingProfit=0;
-        int cooldownProfit=0;
+        int buy=-prices[0];
+        int sell=0,cooldown=0;
         for(int i=1;i<prices.length;i++){
-            int newBuyingProfit=Math.max(buyingProfit,cooldownProfit-prices[i]);
-            int newSellingProfit=Math.max(sellingProfit,prices[i]+buyingProfit);
-            int newCooldownProfit=Math.max(sellingProfit,cooldownProfit);
-            buyingProfit=newBuyingProfit;
-            sellingProfit=newSellingProfit;
-            cooldownProfit=newCooldownProfit;
+            int tBuy=Math.max(buy,cooldown-prices[i]);
+            int tSell=Math.max(sell,prices[i]+buy);
+            cooldown=Math.max(cooldown,sell);
+            buy=tBuy;
+            sell=tSell;
         }
-        return sellingProfit;
+        return sell;
     }
 }
