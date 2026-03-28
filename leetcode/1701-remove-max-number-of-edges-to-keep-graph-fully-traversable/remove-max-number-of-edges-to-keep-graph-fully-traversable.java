@@ -1,72 +1,78 @@
 class Solution {
     public int maxNumEdgesToRemove(int n, int[][] edges) {
-        int[] parentA=new int[n+1];
-        int[] parentB=new int[n+1];
-        int count=0,countA=1,countB=1;
-        int[] rankA=new int[n+1];
-        int[] rankB=new int[n+1];
-        for(int i=0;i<=n;i++){
-          parentA[i]=parentB[i]=i;
-          rankA[i]=rankB[i]=1;
+        int count=0;
+        int[] parentA=new int[n];
+        int[] parentB=new int[n];
+        int[] rankA=new int[n];
+        int[] rankB=new int[n];
+        for(int i=0;i<n;i++){
+            parentA[i]=i;
+            parentB[i]=i;
+            rankA[i]=1;
+            rankB[i]=1;
         }
-        Arrays.sort(edges,(a,b)->b[0]-a[0]);
+       Arrays.sort(edges,(a,b)->b[0]-a[0]);
         for(int i=0;i<edges.length;i++){
-            int category=edges[i][0];
-            int x=edges[i][1];
-            int y=edges[i][2];
-            if(category==3){
-               boolean isUnionA=union(parentA,x,y,rankA);
-               boolean isUnionB=union(parentB,x,y,rankB);
-               if(!isUnionA && !isUnionB){
+            int type=edges[i][0];
+            int u=edges[i][1];
+            int v=edges[i][2];
+            if(type==3){
+             boolean isUnionedA=union(parentA,rankA,u-1,v-1);
+             boolean isUnionedB=union(parentB,rankB,u-1,v-1);
+             if(!isUnionedA && !isUnionedB ){
                 count++;
-               }
-               if(isUnionA){countA++;}
-               if(isUnionB){countB++;}
-            }else if(category==2){
-              boolean isUnionA=union(parentB,x,y,rankB);
-              if(!isUnionA){
-                 count++;
-              }else{
-                countA++;
-              }
+             } 
+            }else if(type==2){
+             boolean isUnionedB=union(parentB,rankB,u-1,v-1);
+             if(!isUnionedB){
+                count++;
+             }
             }else{
-              boolean isUnionB=union(parentA,x,y,rankA);
-              if(!isUnionB){
-                 count++;
-              }else{
-                countB++;
-              }
-            }  
+             boolean isUnionedA=union(parentA,rankA,u-1,v-1);
+             if(!isUnionedA){
+                count++;
+             }
+            }
         }
-        if(countA!=n || countB!=n){
-            return -1;
-        }
+        int countA=0,countB=0;
+            for(int i=0;i<n;i++){
+                if(parentA[i]==i){
+                    countA++;
+                }
+                if(parentB[i]==i){
+                    countB++;
+                }
+            }
+        
+       if(countA>1 || countB>1){
+        return -1;
+       }else{
         return count;
-    }
-
-    public boolean union(int[] parent,int x,int y,int[] rank){
-       int ax=find(parent,x); 
-       int by=find(parent,y);
-       if(ax==by){
-          return false;
        }
-        if(rank[ax]>rank[by]){
-               parent[by]=ax;
-        }else if(rank[ax]<rank[by]){
-                parent[ax]=by;
-         }else{
-                parent[ax]=by;
-                rank[by]++;
-         }
-    return true;
+    }
+    public boolean union(int[] parent,int[] rank, int u, int v){
+        u=findParent(u,parent);
+        v=findParent(v,parent);
+        if(u==v){
+            return false;
+        }
+        if(rank[u]>rank[v]){
+            parent[v]=u;
+        }else if(rank[u]<rank[v]){
+            parent[u]=v;
+        }else{
+            parent[u]=v;
+            rank[v]++;
+        }
+        return true;
     }
 
-     public int find(int[] arr,int idx){
-          if(arr[idx]==idx){
-            return idx;
-          }
-          int temp=find(arr,arr[idx]);
-          arr[idx]=temp;
-          return temp;
+    public int findParent(int k, int[] parent){
+       if(k==parent[k]){
+        return k;
+       }
+       int temp=findParent(parent[k],parent);
+       parent[k]=temp;
+       return temp;
     }
 }
