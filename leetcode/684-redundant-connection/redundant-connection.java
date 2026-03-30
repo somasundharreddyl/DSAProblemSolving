@@ -1,44 +1,47 @@
 class Solution {
     public int[] findRedundantConnection(int[][] edges) {
         int n=edges.length;
-        int[] arr=new int[n+1];
+        int[] ans=new int[2];
+        int[] parent=new int[n+1];
         int[] rank=new int[n+1];
         for(int i=0;i<=n;i++){
-          arr[i]=i;
+          parent[i]=i;
           rank[i]=1;
         }
         for(int i=0;i<n;i++){
-          int x=edges[i][0];
-          int y=edges[i][1];
-         boolean isUnited=union(arr,rank,x,y);
-         if(!isUnited){
-            return edges[i];
-         }
+            int u=edges[i][0];
+            int v=edges[i][1];
+          boolean isUnited=union(parent,rank,u,v);
+          if(!isUnited){
+            ans[0]=u;
+            ans[1]=v;
+          }
         }
-        return new int[2];
+        return ans;
     }
-
-    public boolean union(int[] arr,int[] rank,int x,int y){
-       int ax=find(arr,x);
-       int by=find(arr,y);
-        if(ax==by){
+    public boolean union(int[] parent,int[] rank,int u,int v){
+        u=findParent(parent,u);
+        v=findParent(parent,v);
+        if(u==v){
             return false;
         }
-        if(rank[ax]>rank[by]){
-            arr[by]=ax;
-        }else if(rank[ax]<rank[by]){
-            arr[ax]=by;
+        if(rank[u]>rank[v]){
+            parent[v]=u;
+        }else if(rank[u]<rank[v]){
+            parent[u]=v;
         }else{
-            arr[ax]=by;
-            rank[by]++;
+            parent[v]=u;
+            rank[u]++;
         }
         return true;
     }
 
-    public int find(int[] arr,int v){
-      if(v==arr[v]){return v;}
-      int temp=find(arr,arr[v]);
-      arr[v]=temp;
-      return temp;
+    public int findParent(int[] parent, int k){
+       if(parent[k]==k){
+        return k;
+       }
+       int temp=findParent(parent,parent[k]);
+       parent[k]=temp;
+       return temp;
     }
 }
