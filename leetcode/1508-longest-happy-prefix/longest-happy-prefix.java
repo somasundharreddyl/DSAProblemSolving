@@ -1,10 +1,10 @@
 class Solution {
     public String longestPrefix(String s) {
        int n=s.length();
-        int[] happyPrefixArr=new int[n]; //0,0,1,0,0,0,0
+        int[] happyPrefixArr=new int[n]; 
         char[] charArr=s.toCharArray();
         for(int i=1;i<n;i++){
-          int idx=happyPrefixArr[i-1]; //1
+          int idx=happyPrefixArr[i-1]; 
           if(charArr[i]==charArr[idx]){ 
             happyPrefixArr[i]=idx+1;
           }else{
