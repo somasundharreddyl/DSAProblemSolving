@@ -1,22 +1,29 @@
 class Solution {
     public int trap(int[] height) {
-       int[] prefMax=new int[height.length];
-       int[] suffMax=new int[height.length];
-       int units=0;
-       prefMax[0]=height[0];
-       for(int i=1;i<height.length;i++){
-        prefMax[i]=prefMax[i-1]>height[i]?prefMax[i-1]:height[i]; 
-       } 
-       suffMax[height.length-1]=height[height.length-1];
-       for(int i=height.length-2;i>=0;i--){
-        suffMax[i]=suffMax[i+1]>height[i]?suffMax[i+1]:height[i];
-       }
-       for(int i=1;i<height.length-1;i++){
-         if(height[i]<prefMax[i-1] && height[i]<suffMax[i+1]){
-           int minH=prefMax[i-1]<suffMax[i+1]?prefMax[i-1]:suffMax[i+1];
-           units+=(minH-height[i]);
+       int n=height.length;
+       int[] prefixMaxArr=new int[n];
+       int[] suffixMaxArr=new int[n];
+       for(int i=0;i<n;i++){
+         if(i==0){
+          prefixMaxArr[i]=height[i];  
+         }else{
+          prefixMaxArr[i]=prefixMaxArr[i-1]>height[i]?prefixMaxArr[i-1]:height[i]; 
          }
        }
-       return units;
+       for(int i=n-1;i>=0;i--){
+        if(i==n-1){
+            suffixMaxArr[i]=height[i];
+        }else{
+            suffixMaxArr[i]=suffixMaxArr[i+1]>height[i]?suffixMaxArr[i+1]:height[i];
+        }
+       }
+       int units=0;
+       for(int i=1;i<n-1;i++){
+        int minH=Math.min(prefixMaxArr[i-1],suffixMaxArr[i+1]);
+        if(minH>height[i]){
+        units+=(minH-height[i]);
+        }
+       } 
+       return units;    
     }
 }
