@@ -1,19 +1,19 @@
 class Solution {
     public int numSubarrayBoundedMax(int[] nums, int left, int right) {
-        int count=0;
-        int lgei=0;
-        int validStartingPoints=0;
-        for(int i=0;i<nums.length;i++){
+        int size=nums.length;
+        int max=Integer.MIN_VALUE;
+        int total=0,validstartingPoints=0,lgei=-1;
+        for(int i=0;i<size;i++){
             if(nums[i]>right){
-                lgei=i+1;
-             validStartingPoints=0;
+                lgei=i;
+                validstartingPoints=0;
             }else if(nums[i]>=left && nums[i]<=right){
-              validStartingPoints=i-lgei+1;
-              count+=i-lgei+1;
+                validstartingPoints=i-lgei;
+                total+=validstartingPoints;
             }else{
-               count+=validStartingPoints;
+                total+=validstartingPoints;
             }
         }
-        return count;
+        return total;
     }
 }
