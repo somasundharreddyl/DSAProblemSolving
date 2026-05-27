@@ -1,19 +1,24 @@
 class Solution {
     public int maxProduct(int[] nums) {
-       int prefixMaxProd=nums[0],overAllPrefixMaxProd=nums[0],suffixMaxProd=nums[nums.length-1],overAllSuffixMaxProd=nums[nums.length-1];
+        int max = nums[0];
+        int min = nums[0];
+        int result = nums[0];
 
-       for(int i=1;i<nums.length;i++){
-           if(prefixMaxProd==0){prefixMaxProd=nums[i];}
-          else{ prefixMaxProd*=nums[i];}
-            overAllPrefixMaxProd=overAllPrefixMaxProd>prefixMaxProd?overAllPrefixMaxProd:prefixMaxProd;
-       }
+        for (int i = 1; i < nums.length; i++) {
+            
+            // if negative, swap max & min
+            if (nums[i] < 0) {
+                int temp = max;
+                max = min;
+                min = temp;
+            }
 
-        for(int i=nums.length-2;i>=0;i--){
-            if(suffixMaxProd==0){suffixMaxProd=nums[i];}
-          else{ suffixMaxProd*=nums[i];}
-            overAllSuffixMaxProd=overAllSuffixMaxProd>suffixMaxProd?overAllSuffixMaxProd:suffixMaxProd;
-       }
+            max = Math.max(nums[i], max * nums[i]);
+            min = Math.min(nums[i], min * nums[i]);
 
-       return overAllPrefixMaxProd>overAllSuffixMaxProd?overAllPrefixMaxProd:overAllSuffixMaxProd;
+            result = Math.max(result, max);
+        }
+
+        return result;
     }
 }
