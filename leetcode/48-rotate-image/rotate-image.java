@@ -1,11 +1,9 @@
 class Solution {
     public void rotate(int[][] matrix) {
-        transpose(matrix);
-        reverse(matrix);
-    }
-    public void transpose(int[][] matrix){
-        for(int i=0;i<matrix.length;i++){
-            for(int j=i;j<matrix[i].length;j++){
+        int r=matrix.length;
+        int c=matrix[0].length;
+        for(int i=0;i<r;i++){
+            for(int j=0;j<=i;j++){
                 if(i!=j){
                 int temp=matrix[i][j];
                 matrix[i][j]=matrix[j][i];
@@ -13,18 +11,15 @@ class Solution {
                 }
             }
         }
-    }
-    public void reverse(int[][] matrix){
-       
-       for(int i=0;i<matrix.length;i++){
-        int start=0,end=matrix[0].length-1;
-        while(start<end){
-            int temp=matrix[i][start];
-            matrix[i][start]=matrix[i][end];
-            matrix[i][end]=temp;
-            start++;
-            end--;
+        for(int i=0;i<r;i++){
+            int start=0,end=c-1;
+            while(start<=end){
+                int temp=matrix[i][start];
+                matrix[i][start]=matrix[i][end];
+                matrix[i][end]=temp;
+                start++;
+                end--;
+            }
         }
-       }
     }
 }
