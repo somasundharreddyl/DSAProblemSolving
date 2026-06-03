@@ -8,7 +8,8 @@ class Solution {
               num1=nums[i];
               freq1++;
               continue;
-            }else if(freq2==0 || nums[i]==num2){
+            } 
+            if(freq2==0 || nums[i]==num2){
                 num2=nums[i];
                 freq2++;
                 continue;
