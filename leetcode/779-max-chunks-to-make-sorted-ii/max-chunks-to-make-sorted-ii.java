@@ -1,22 +1,29 @@
 class Solution {
     public int maxChunksToSorted(int[] arr) {
+        int max=Integer.MIN_VALUE;
         int chunks=0;
-        int[] suffMinArr=new int[arr.length];
-        suffMinArr[arr.length-1]=arr[arr.length-1];
-        for(int i=arr.length-2;i>=0;i--){
-           suffMinArr[i]=suffMinArr[i+1]<arr[i]?suffMinArr[i+1]:arr[i];
+        int[] prefixMax=new int[arr.length];
+        int[] suffixMin=new int[arr.length];
+        for(int i=0;i<arr.length;i++){
+          if(i==0){
+            prefixMax[i]=arr[i];
+          }else{
+           prefixMax[i]=arr[i]>prefixMax[i-1]?arr[i]:prefixMax[i-1];
+          }
         }
-        int maxIdx=-1;
+        for(int i=arr.length-1;i>=0;i--){
+          if(i==arr.length-1){
+            suffixMin[i]=arr[i];
+          }else{
+           suffixMin[i]=arr[i]<suffixMin[i+1]?arr[i]:suffixMin[i+1];
+          }
+        }
         for(int i=0;i<arr.length-1;i++){
-            if(i==0){
-                maxIdx=0;
-            }else{
-                maxIdx=arr[maxIdx]>arr[i]?maxIdx:i;
-            }
-            if(arr[maxIdx]<=suffMinArr[i+1]){
-               chunks++;
+            if(prefixMax[i]<=suffixMin[i+1]){
+              chunks++;
             }
         }
-        return chunks+1;
+        chunks++;
+        return chunks;
     }
 }
