@@ -1,45 +1,35 @@
 class Solution {
     public int nextGreaterElement(int n) {
-
-        char[] chArr = (n+"").toCharArray();
-        if(chArr.length==0 || chArr.length==1){
-            return -1;
-        }
-        int idx=chArr.length-1;       //1
-        for(int i=chArr.length-2;i>=0;i--){
-             if(chArr[idx]>chArr[i]){
-                int k=idx;  //1
-                while(k<chArr.length && chArr[k]>chArr[i]){
-                    k++;          
-                }
-                k--;
-                char temp=chArr[i];  
-                chArr[i]=chArr[k];  
-                chArr[k]=temp;       
-                int start=idx,end=chArr.length-1;
-                reverseArray(chArr,start,end);
+        String num=n+"";
+        char[] chArr=num.toCharArray();
+        int idx=-1;
+        for(int i=chArr.length-1;i>0;i--){
+            if(chArr[i]>chArr[i-1]){
+                idx=i-1;
                 break;
-             }  
-             idx--;
-           if(i==0){
-            return -1;
-           }   
+            }
         }
-         long ans= Long.parseLong(new String(chArr));
-         if(ans>Integer.MAX_VALUE){
+        if(idx==-1){return idx;}
+        for(int i=chArr.length-1;i>idx;i--){
+           if(chArr[i]>chArr[idx]){
+            char temp=chArr[i];
+            chArr[i]=chArr[idx];
+            chArr[idx]=temp;
+            break;
+           }
+        }
+        int start=idx+1,end=num.length()-1;
+        while(start<=end){
+          char temp=chArr[start];
+          chArr[start]=chArr[end];
+          chArr[end]=temp;
+          start++;
+          end--;
+        }
+        long res=Long.parseLong(String.valueOf(chArr));
+        if(res>Integer.MAX_VALUE){
             return -1;
-         }else{
-            return (int)ans;
-         }
+        }
+        return (int)res;   
     }
-    public void reverseArray(char[] ch,int start,int end){
-          while(start<end){
-            char temp=ch[start];
-            ch[start]=ch[end];
-            ch[end]=temp;
-            start++;
-            end--;
-          }
-    }
-
 }
