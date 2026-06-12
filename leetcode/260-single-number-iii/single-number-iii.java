@@ -1,33 +1,22 @@
 class Solution {
     public int[] singleNumber(int[] nums) {
-
-        int val1=-1,val2=-1;
-        int val=nums[0];
-        int index=-1;
+        int xorValue=nums[0];
+        int setBit=0,unSetBit=0;
         for(int i=1;i<nums.length;i++){
-            val=val^nums[i];
+           xorValue=xorValue^nums[i];
         }
         for(int i=0;i<32;i++){
-            if((val&(1<<i))!=0){
-               index=i;
-               break;
+            if((xorValue&(1<<i))!=0){
+                for(int j=0;j<nums.length;j++){
+                   if((nums[j]&(1<<i))==0){
+                    setBit=setBit^nums[j];
+                   }else{
+                    unSetBit=unSetBit^nums[j];
+                   }
+                }
+              return new int[]{setBit,unSetBit};  
             }
         }
-        for(int i=0;i<nums.length;i++){
-            if((nums[i] & (1<<index))!=0){
-               if(val1==-1){
-                val1=nums[i];
-               }else{
-                val1=val1^nums[i];
-               }
-            }else{
-               if(val2==-1){
-                val2=nums[i];
-               }else{
-                val2=val2^nums[i];
-               }
-            }
-        }
-           return new int[]{val1,val2};
+        return new int[]{-1,-1};
     }
 }
