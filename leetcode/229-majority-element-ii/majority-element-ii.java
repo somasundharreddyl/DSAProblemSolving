@@ -19,13 +19,19 @@ class Solution {
                 freq2--;
         }
         int count1=0,count2=0;
+         if(freq1>0){
         for(int i=0;i<n;i++){
-             if(nums[i]==num1){
+            if(nums[i]==num1){
                 count1++;
-             }
-             if(nums[i]==num2){
+            }
+        }
+        }
+        if(freq2>0){
+        for(int i=0;i<n;i++){
+            if(nums[i]==num2){
                 count2++;
-             }
+            }
+        }
         }
         if(count1>n/3){
           ans.add(num1);
