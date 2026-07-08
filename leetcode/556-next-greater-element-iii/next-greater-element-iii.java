@@ -1,39 +1,40 @@
 class Solution {
     public int nextGreaterElement(int n) {
-       String num=n+"";
-       int size=num.length();
-       char[] ch=num.toCharArray();
-       int idx=-1,idx2=-1;
-       for(int i=size-2;i>=0;i--){
-        if(ch[i]<ch[i+1]){
-           idx=i;
-           break;
+        char[] ch = (n+"").toCharArray();
+       int index=-1;
+       int minValIndex=0;
+        for(int i=ch.length-2; i>=0; i--){
+            if(ch[i]<ch[i+1]){
+              index=i;
+              break;   
+            }
         }
-       }
-       if(idx==-1){
-        return idx;
-       }
-       for(int i=size-1;i>idx;i--){
-         if(ch[i]>ch[idx]){
-            idx2=i;
-            break;
-         }
-       }
-       char temp=ch[idx];
-       ch[idx]=ch[idx2];
-       ch[idx2]=temp;
-       int start=idx+1,end=size-1;
-       while(start<=end){
-         char temp1=ch[start];
-       ch[start]=ch[end];
-       ch[end]=temp1;
-       start++;
-       end--;
-       }
-       long ans= Long.parseLong(String.valueOf(ch));
-       if(ans>Integer.MAX_VALUE){
-        return -1;
-       }
-       return (int)ans;
+        if(index==-1){
+            return -1;
+        }
+        for(int i=ch.length-1;i>index;i--){
+               if(ch[index]<ch[i]){
+                   minValIndex=i;
+                   break;
+               }
+        }
+        char temp=ch[index];
+        ch[index]=ch[minValIndex];
+        ch[minValIndex]=temp;
+
+        int low=index+1,high=ch.length-1;
+        while(low<high){
+           char temp1=ch[low];
+        ch[low]=ch[high];
+        ch[high]=temp1; 
+        low++;
+        high--;
+        }
+        long ans= Long.parseLong(new String(ch));
+        if(ans>Integer.MAX_VALUE){
+            return -1;
+        }else{
+            return (int)ans;
+        }
     }
 }
