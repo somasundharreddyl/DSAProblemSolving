@@ -1,35 +1,39 @@
 class Solution {
     public int nextGreaterElement(int n) {
-        String num=n+"";
-        char[] chArr=num.toCharArray();
-        int idx=-1;
-        for(int i=chArr.length-1;i>0;i--){
-            if(chArr[i]>chArr[i-1]){
-                idx=i-1;
-                break;
-            }
+       String num=n+"";
+       int size=num.length();
+       char[] ch=num.toCharArray();
+       int idx=-1,idx2=-1;
+       for(int i=size-2;i>=0;i--){
+        if(ch[i]<ch[i+1]){
+           idx=i;
+           break;
         }
-        if(idx==-1){return idx;}
-        for(int i=chArr.length-1;i>idx;i--){
-           if(chArr[i]>chArr[idx]){
-            char temp=chArr[i];
-            chArr[i]=chArr[idx];
-            chArr[idx]=temp;
+       }
+       if(idx==-1){
+        return idx;
+       }
+       for(int i=size-1;i>idx;i--){
+         if(ch[i]>ch[idx]){
+            idx2=i;
             break;
-           }
-        }
-        int start=idx+1,end=num.length()-1;
-        while(start<=end){
-          char temp=chArr[start];
-          chArr[start]=chArr[end];
-          chArr[end]=temp;
-          start++;
-          end--;
-        }
-        long res=Long.parseLong(String.valueOf(chArr));
-        if(res>Integer.MAX_VALUE){
-            return -1;
-        }
-        return (int)res;   
+         }
+       }
+       char temp=ch[idx];
+       ch[idx]=ch[idx2];
+       ch[idx2]=temp;
+       int start=idx+1,end=size-1;
+       while(start<=end){
+         char temp1=ch[start];
+       ch[start]=ch[end];
+       ch[end]=temp1;
+       start++;
+       end--;
+       }
+       long ans= Long.parseLong(String.valueOf(ch));
+       if(ans>Integer.MAX_VALUE){
+        return -1;
+       }
+       return (int)ans;
     }
 }
