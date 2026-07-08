@@ -4,7 +4,7 @@ class Solution {
         List<Integer> ans=new ArrayList<>();
         int n=nums.length;
         int freq1=0,freq2=0;
-        for(int i=0;i<nums.length;i++){
+        for(int i=0;i<n;i++){
             if((freq1==0 && num2!=nums[i]) || num1==nums[i]){
                 num1=nums[i];
                 freq1++;
@@ -15,13 +15,11 @@ class Solution {
                 freq2++;
                 continue;
             }
-            if(nums[i]!=num1 && nums[i]!=num2){
                 freq1--;
                 freq2--;
-            }
         }
         int count1=0,count2=0;
-        for(int i=0;i<nums.length;i++){
+        for(int i=0;i<n;i++){
              if(nums[i]==num1){
                 count1++;
              }
