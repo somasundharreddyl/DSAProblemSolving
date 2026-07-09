@@ -4,8 +4,8 @@ class Solution {
         int chunks=0;
         for(int i=0;i<arr.length;i++){
             max=max>arr[i]?max:arr[i];
-            if(max==i){
-              chunks++;
+            if(i==max){
+                chunks++;
             }
         }
         return chunks;
