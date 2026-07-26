@@ -4,38 +4,38 @@ class MinStack {
     long min;
 
     public MinStack() {
-        stack=new Stack<Long>();
-        min=Long.MIN_VALUE;
+        stack=new Stack<>();
+        min=-1L;
     }
     
     public void push(int value) {
-        if(stack.isEmpty()){
-            stack.push(0L);
-            min=value;
-        }else{
-            stack.push(value-min);
-            min=min<value?min:value;
-        }
+       if(stack.isEmpty()){
+        min=value;
+       }
+       long diff=(long)value-min;
+       stack.push(diff);
+       if(diff<0){
+        min=value;
+       } 
     }
     
     public void pop() {
         long rem=stack.pop();
         if(rem<0){
-          min=min-rem;
+            min=min-rem;
         }
     }
     
     public int top() {
-        long rem=stack.peek();
-        if(rem>=0){
-          return (int)(min+rem);
-        }else{
-          return (int)(min); 
-        }
+       long rem=stack.peek();
+       if(rem<0){
+        return (int)(min);
+       }
+       return (int)(min+rem); 
     }
     
     public int getMin() {
-          return (int)min; 
+        return (int)min;
     }
 }
 
