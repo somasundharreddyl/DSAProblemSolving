@@ -12,7 +12,7 @@ class MinStack {
        if(stack.isEmpty()){
         min=value;
        }
-       long diff=(long)value-min;
+       long diff=value-min;
        stack.push(diff);
        if(diff<0){
         min=value;
