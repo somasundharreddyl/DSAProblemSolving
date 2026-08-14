@@ -1,45 +1,36 @@
 class Solution {
     public int[] maxSlidingWindow(int[] nums, int k) {
-        int n=nums.length;
-        Deque<Integer> dq=new ArrayDeque<>();
-        dq.add(nums[0]);
-        for(int i=1;i<k;i++){
-            if(dq.size()==0){
-              dq.addFirst(nums[i]);
-            }else if(nums[i]>dq.getFirst()){
-          while(dq.size()>0 && nums[i]>dq.getFirst()){
-            dq.removeFirst();
+       int n=nums.length;
+       int[] ans=new int[n-k+1];
+       Deque<Integer> q=new ArrayDeque<>();
+       int max=Integer.MIN_VALUE;
+       int p=0;
+       for(int i=0;i<k;i++){
+          max=max>nums[i]?max:nums[i];
+          if(q.isEmpty()){
+            q.add(nums[i]);
+            continue;
           }
-          dq.addFirst(nums[i]);
-        }else{
-           while(dq.size()>0 && nums[i]>dq.getLast()){
-              dq.removeLast();
-           }
-           dq.addLast(nums[i]);
-        }
-        }
-        int[] ans=new int[n-k+1];
-        ans[0]=dq.getFirst();
-        for(int i=k;i<n;i++){
-        if(dq.getFirst()==nums[i-k]){
-           dq.removeFirst();
-        }
-        if(dq.size()==0){
-              dq.addFirst(nums[i]);
-        }       
-        else if(nums[i]>dq.getFirst()){
-          while(dq.size()>0 && nums[i]>dq.getFirst()){
-            dq.removeFirst();
+          while(!q.isEmpty() && nums[i]>q.peekLast()){
+            q.removeLast();
           }
-          dq.addFirst(nums[i]);
-        }else{
-           while(dq.size()>0 && nums[i]>dq.getLast()){
-              dq.removeLast();
-           }
-           dq.addLast(nums[i]);
+          q.addLast(nums[i]);
+       }
+       ans[p]=max;
+       p++;
+       for(int i=k;i<n;i++){
+        if(!q.isEmpty() && nums[i-k]==q.peekFirst()){
+            q.removeFirst();
         }
-        ans[i-k+1]=dq.getFirst(); 
+        while(!q.isEmpty() && nums[i]>q.peekLast()){
+            q.removeLast();
         }
-        return ans;
+            q.addLast(nums[i]);
+            ans[p]=q.peekFirst();
+            p++;
+       }
+     return ans;
     }
 }
+
+//q=[3,-1]
