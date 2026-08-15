@@ -10,33 +10,31 @@
  */
 class Solution {
     public void reorderList(ListNode head) {
-        if(head==null && head.next==null){
-            return;
+        ListNode fastNode=head;
+        ListNode slowNode=head;
+        while(fastNode!=null && fastNode.next!=null && fastNode.next.next!=null){
+            fastNode=fastNode.next.next;
+            slowNode=slowNode.next;
         }
-       ListNode fast=head;
-       ListNode slow=head;
-       while(fast.next!=null && fast.next.next!=null){
-        fast=fast.next.next;
-        slow=slow.next;
-       }
-       ListNode curr=slow.next;
-       slow.next=null;
-       ListNode prev=null;
-       while(curr!=null){
-           ListNode currp1=curr.next;
-            curr.next=prev;
-            prev=curr;
-            curr=currp1;
-       }
-       ListNode left=head;
-       ListNode right=prev;
-       while(right!=null){
-       ListNode leftp1=left.next;
-       ListNode rightp1=right.next;
-        left.next=right;
-        right.next=leftp1;
-        left=leftp1;
-        right=rightp1;
-       }
+        ListNode currNode=slowNode.next;
+        ListNode prevNode=null;
+        slowNode.next=null;
+        while(currNode!=null){
+            ListNode nextNode=currNode.next;
+            currNode.next=prevNode;
+            prevNode=currNode;
+            currNode=nextNode;
+        }
+        ListNode firstNode=head;
+        ListNode secNode=prevNode;
+        while(firstNode!=null && secNode!=null){
+          ListNode firstnextNode=firstNode.next;
+          ListNode secnextNode=secNode.next;
+          firstNode.next=secNode;
+          firstNode.next.next=firstnextNode;
+          secNode=secnextNode;
+          firstNode=firstnextNode;
+        }
+        
     }
 }
