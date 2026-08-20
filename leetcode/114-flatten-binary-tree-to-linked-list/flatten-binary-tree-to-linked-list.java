@@ -17,28 +17,31 @@ class Solution {
     public void flatten(TreeNode root) {
         flattenTree(root);
     }
+
     public TreeNode flattenTree(TreeNode root){
         if(root==null){
-            return root;
+            return null;
         }
-    TreeNode l=flattenTree(root.left);
-    TreeNode r=flattenTree(root.right);
-    if(l==null && r==null){
-      return root;
-    }else if(l==null && r!=null){
-        return r;
-    }else if(l!=null && r==null){
-        TreeNode lt=root.left;
-        root.right=lt;
-        root.left=null;
-        return l;
-    }else{
-        TreeNode lt=root.left;
-        TreeNode rt=root.right;
-        root.right=lt;
-        l.right=rt;
-        root.left=null;
-        return r;
-    }
+
+        TreeNode lt=flattenTree(root.left);
+        TreeNode rt=flattenTree(root.right);
+
+        if(lt==null && rt==null){
+            return root;
+        }else if(lt==null && rt!=null){
+            return rt;
+        }else if(lt!=null && rt==null){
+            TreeNode templt=root.left;
+            root.right=templt;
+            root.left=null;
+            return lt;
+        }else{
+            TreeNode templt=root.left;
+            TreeNode temprt=root.right;
+            root.right=templt;
+            lt.right=temprt;
+            root.left=null;
+            return rt;
+        }
     }
 }
