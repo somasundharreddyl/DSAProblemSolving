@@ -17,14 +17,14 @@ class Solution {
         }
         TreeNode left=lca(root.left,p,q);
         TreeNode right=lca(root.right,p,q);
-        if(left==null && right==null){
-            return null;
+        if(left!=null && right!=null){
+            return root;
         }else if(left==null && right!=null){
             return right;
         }else if(left!=null && right==null){
             return left;
         }else{
-            return root;
+            return null;
         }
     }
 }
