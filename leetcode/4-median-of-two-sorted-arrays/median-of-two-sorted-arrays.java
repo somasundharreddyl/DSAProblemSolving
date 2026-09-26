@@ -7,7 +7,7 @@ class Solution {
         int t=nums1.length+nums2.length;
         while(s<=e){
             int m1=s+(e-s)/2;
-            int m2=((t+1)/2)-m1;
+            int m2=((t)/2)-m1;
             int left1=(m1==0)?Integer.MIN_VALUE:nums1[m1-1];
             int left2=(m2==0)?Integer.MIN_VALUE:nums2[m2-1];
             int right1=(m1==nums1.length)?Integer.MAX_VALUE:nums1[m1];
@@ -16,7 +16,7 @@ class Solution {
                 if(t%2==0){
                    return (Math.max(left1,left2)+Math.min(right1,right2))/2.0;
                 }else{
-                   return Math.max(left1,left2)*1.0;
+                   return Math.min(right1,right2)*1.0;
                 }
             }else if(right1<left2){
                 s=m1+1;
