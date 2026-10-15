@@ -1,39 +1,38 @@
 class Solution {
     public int[] gridIllumination(int n, int[][] lamps, int[][] queries) {
-        Map<Integer,Integer> hmRow=new HashMap<>();
-        Map<Integer,Integer> hmCol=new HashMap<>();
-        Map<Integer,Integer> hmRminusC=new HashMap<>();
-        Map<Integer,Integer> hmRplusC=new HashMap<>();
-        Map<Integer,Integer> hmBox=new HashMap<>();
-        int[][] directions={{-1,-1},{-1,0},{-1,1},{0,1},{1,1},{1,0},{1,-1},{0,-1},{0,0}};
         int[] ans=new int[queries.length];
+        Map<Integer,Integer> xMap=new HashMap<>();
+        Map<Integer,Integer> yMap=new HashMap<>();
+        Map<Integer,Integer> d1Map=new HashMap<>();
+        Map<Integer,Integer> d2Map=new HashMap<>();
+        Map<Integer,Integer> lampsMap=new HashMap<>();
+        int[][] dirs={{-1,0},{-1,1},{0,1},{1,1},{1,0},{1,-1},{0,-1},{-1,-1},{0,0}};
         for(int i=0;i<lamps.length;i++){
-            int x=lamps[i][0];
-            int y=lamps[i][1];
-            hmRow.put(x,hmRow.getOrDefault(x,0)+1);
-            hmCol.put(y,hmCol.getOrDefault(y,0)+1);
-            hmRminusC.put(x-y,hmRminusC.getOrDefault(x-y,0)+1);
-            hmRplusC.put(x+y,hmRplusC.getOrDefault(x+y,0)+1);
-            hmBox.put(x*n+y,hmBox.getOrDefault(x*n+y,0)+1);
+               int x=lamps[i][0];
+               int y=lamps[i][1];
+               int k=(x*n)+y;
+               lampsMap.put(k,lampsMap.getOrDefault(k,0)+1);
+               xMap.put(x,xMap.getOrDefault(x,0)+1);
+               yMap.put(y,yMap.getOrDefault(y,0)+1);
+               d1Map.put(x+y,d1Map.getOrDefault(x+y,0)+1);
+               d2Map.put(x-y,d2Map.getOrDefault(x-y,0)+1);
         }
-
         for(int i=0;i<queries.length;i++){
-            int x=queries[i][0];
-            int y=queries[i][1];
-            if(hmRow.getOrDefault(x,0)>0 || hmCol.getOrDefault(y,0)>0 || hmRminusC.getOrDefault(x-y,0)>0
-            || hmRplusC.getOrDefault(x+y,0)>0 || hmBox.getOrDefault(x*n+y,0)>0){
+            int x1=queries[i][0];
+            int y1=queries[i][1];
+            if(xMap.getOrDefault(x1,0)>0 || yMap.getOrDefault(y1,0)>0 || d1Map.getOrDefault(x1+y1,0)>0 || d2Map.getOrDefault(x1-y1,0)>0){
                 ans[i]=1;
             }
-            for(int j=0;j<directions.length;j++){
-                int x1=x+directions[j][0];
-                int y1=y+directions[j][1];
-                if(x1>=0 && x1<n && y1>=0 && y1<n && hmBox.containsKey(x1*n+y1)){
-                      int count=hmBox.get(x1*n+y1);
-                      hmRow.put(x1,hmRow.getOrDefault(x1,0)-count);
-                      hmCol.put(y1,hmCol.getOrDefault(y1,0)-count);
-                      hmRminusC.put(x1-y1,hmRminusC.getOrDefault(x1-y1,0)-count);
-                      hmRplusC.put(x1+y1,hmRplusC.getOrDefault(x1+y1,0)-count);
-                      hmBox.remove(x1*n+y1);    
+            for(int[] dir:dirs){
+                int x2=dir[0]+x1;
+                int y2=dir[1]+y1;
+                if(x2>=0 && x2<n && y2>=0 && y2<n && lampsMap.containsKey(x2*n+y2)){
+                    int c=lampsMap.get(x2*n+y2);
+                    xMap.put(x2,xMap.getOrDefault(x2,1)-c);
+                    yMap.put(y2,yMap.getOrDefault(y2,1)-c);
+                    d1Map.put(x2+y2,d1Map.getOrDefault(x2+y2,1)-c);
+                    d2Map.put(x2-y2,d2Map.getOrDefault(x2-y2,1)-c);
+                    lampsMap.remove(x2*n+y2);
                 }
             }
         }
