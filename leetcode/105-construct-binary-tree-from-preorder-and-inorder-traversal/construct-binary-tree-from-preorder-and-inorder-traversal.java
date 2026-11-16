@@ -15,23 +15,20 @@
  */
 class Solution {
     public TreeNode buildTree(int[] preorder, int[] inorder) {
-       int pStart=0,pEnd=preorder.length-1,iStart=0,iEnd=inorder.length-1;
-        Map<Integer,Integer> map=new HashMap<>();
+        Map<Integer,Integer> hMap=new HashMap<>();
         for(int i=0;i<inorder.length;i++){
-            map.put(inorder[i],i);
+            hMap.put(inorder[i],i);
         }
-      return  constructTree(preorder,inorder,pStart,pEnd,iStart,iEnd,map);
+        return constructTree(preorder,0,preorder.length-1,inorder,0,inorder.length-1,hMap);
     }
-    public TreeNode constructTree(int[] preorder,int[] inorder,int pStart,int pEnd,
-    int iStart,int iEnd,Map<Integer,Integer> map){
-         if(pStart>pEnd || iStart>iEnd){
+    public TreeNode constructTree(int[] preorder,int ps, int pe, int[] inorder, int is, int ie,Map<Integer,Integer> hMap){
+        if(ps>pe || is>ie){
             return null;
-         }
-         TreeNode root=new TreeNode(preorder[pStart]);
-         int idx=map.get(preorder[pStart]);
-         int count=idx-iStart;
-         root.left=constructTree(preorder,inorder,pStart+1,pStart+count,iStart,idx-1,map);
-         root.right=constructTree(preorder,inorder,pStart+count+1,pEnd,idx+1,iEnd,map);
-         return root;
+        }
+        TreeNode node=new TreeNode(preorder[ps]);
+        int idx=hMap.get(preorder[ps]);
+        node.left=constructTree(preorder,ps+1,ps+1+(idx-1-is),inorder,is,idx-1,hMap);
+        node.right=constructTree(preorder,pe-(ie-idx-1),pe,inorder,idx+1,ie,hMap);
+        return node;
     }
 }
