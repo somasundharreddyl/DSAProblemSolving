@@ -14,28 +14,21 @@
  * }
  */
 class Solution {
-
-    public TreeNode buildTree(int[] inorder, int[] postorder) {    
-    return construct(postorder,0,postorder.length-1,inorder,0,inorder.length-1);
+    public TreeNode buildTree(int[] inorder, int[] postorder) {
+        Map<Integer,Integer> hMap=new HashMap<>();
+        for(int i=0;i<inorder.length;i++){
+            hMap.put(inorder[i],i);
+        }
+        return constructTree(postorder,0,postorder.length-1,inorder,0,inorder.length-1,hMap);
     }
-
-    public TreeNode construct(int[] postorder, int ps, int pe, int[] inorder, int is, int ie){
+    public TreeNode constructTree(int[] postorder,int ps, int pe, int[] inorder, int is, int ie,Map<Integer,Integer> hMap){
         if(ps>pe || is>ie){
             return null;
         }
-        int value=postorder[pe];
-        int idx=0;
-        TreeNode root=new TreeNode(value);
-        for(int i=is;i<=ie;i++){
-            if(value==inorder[i]){
-               idx=i;
-               break;
-            }
-        }
-       int count=idx-is;
-       root.left= construct(postorder,ps,ps+count-1,inorder,is,idx-1);
-       root.right= construct(postorder,ps+count,pe-1,inorder,idx+1,ie);
-       return root;
+        TreeNode node=new TreeNode(postorder[pe]);
+        int idx=hMap.get(postorder[pe]);
+        node.left=constructTree(postorder,ps,ps+(idx-1-is),inorder,is,idx-1,hMap);
+        node.right=constructTree(postorder,pe-1-(ie-idx-1),pe-1,inorder,idx+1,ie,hMap);
+        return node;
     }
-
 }
