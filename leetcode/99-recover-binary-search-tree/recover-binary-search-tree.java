@@ -14,29 +14,27 @@
  * }
  */
 class Solution {
-    TreeNode prev=null;
-    TreeNode temp1=null;
-    TreeNode temp2=null;
+    TreeNode firstNode=null;
+    TreeNode secondNode=null;
+    TreeNode prevNode=null;
     public void recoverTree(TreeNode root) {
-        TreeNode temp=root;
-        inorder(root);
-        int curr=temp1.val;
-        temp1.val=temp2.val;
-        temp2.val=curr;
+        inorderTraverse(root);
+        int temp=firstNode.val;
+        firstNode.val=secondNode.val;
+        secondNode.val=temp;
     }
-    void inorder(TreeNode root){
-        if(root==null){
+    public void inorderTraverse(TreeNode node){
+        if(node==null){
             return;
         }
-        inorder(root.left);
-        if(prev!=null && root.val<prev.val && temp1==null){
-            temp1=prev;
-            temp2=root;
-        }else if(prev!=null && root.val<prev.val && temp1!=null){
-            temp2=root;
+        inorderTraverse(node.left);
+        if(prevNode!=null && prevNode.val>node.val && firstNode==null){
+            firstNode=prevNode;
+            secondNode=node;
+        }else if(prevNode!=null && prevNode.val>node.val && firstNode!=null){
+            secondNode=node;
         }
-        prev=root;
-        inorder(root.right);
-
+        prevNode=node;
+        inorderTraverse(node.right);
     }
 }
